@@ -1,0 +1,135 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ShoppingBag, UserRound } from "lucide-react";
+
+import { navigationItems } from "@/constants/navigation";
+import { useScrollDirection } from "@/hooks/use-scroll-direction";
+import { cn } from "@/lib/utils";
+import { Container } from "@/components/ui/container";
+import { MenuButton } from "@/components/ui/menu-button";
+import { Wordmark } from "@/components/ui/wordmark";
+import { useCart } from "@/components/providers/cart-provider";
+
+export function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const scrollDirection = useScrollDirection();
+  const { itemCount } = useCart();
+
+  useEffect(() => {
+    document.body.classList.toggle("overflow-hidden", isOpen);
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [isOpen]);
+
+  return (
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-ink/60 backdrop-blur-xl transition-transform duration-700 ease-luxury",
+        scrollDirection === "down" && !isOpen && "-translate-y-full",
+      )}
+    >
+      <Container className="flex h-20 items-center justify-between sm:h-24">
+        <nav aria-label="Primary navigation" className="hidden flex-1 lg:block">
+          <ul className="flex items-center gap-9">
+            {navigationItems.slice(1, 3).map((item) => (
+              <li key={item.href}>
+                <NavLink href={item.href}>{item.label}</NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <Wordmark className="lg:absolute lg:left-1/2 lg:-translate-x-1/2" />
+
+        <nav aria-label="Secondary navigation" className="hidden flex-1 lg:block">
+          <ul className="flex items-center justify-end gap-7">
+            {navigationItems.slice(3).map((item) => (
+              <li key={item.href}>
+                <NavLink href={item.href}>{item.label}</NavLink>
+              </li>
+            ))}
+            <li>
+              <Link href="/login" aria-label="Account" className="block p-2 text-ivory/70 transition hover:text-gold-300">
+                <UserRound className="size-4" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/cart" aria-label={`Shopping bag with ${itemCount} items`} className="relative block p-2 text-ivory/70 transition hover:text-gold-300">
+                <ShoppingBag className="size-4" />
+                {itemCount > 0 && (
+                  <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-gold-300 text-[0.48rem] font-bold text-ink">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <MenuButton isOpen={isOpen} onClick={() => setIsOpen((value) => !value)} />
+      </Container>
+
+      <div
+        id="mobile-navigation"
+        className={cn(
+          "fixed inset-x-0 top-20 h-[calc(100dvh-5rem)] overflow-hidden bg-ink/95 backdrop-blur-2xl transition-[opacity,visibility] duration-500 sm:top-24 sm:h-[calc(100dvh-6rem)] lg:hidden",
+          isOpen ? "visible opacity-100" : "invisible opacity-0",
+        )}
+      >
+        <Container className="flex h-full flex-col justify-center pb-20">
+          <nav aria-label="Mobile navigation">
+            <ul className="space-y-3">
+              {navigationItems.map((item, index) => (
+                <li
+                  key={item.href}
+                  className={cn(
+                    "translate-y-4 opacity-0 transition duration-700 ease-luxury",
+                    isOpen && "translate-y-0 opacity-100",
+                    index === 1 && "delay-75",
+                    index === 2 && "delay-150",
+                    index === 3 && "delay-200",
+                  )}
+                >
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className="group flex items-baseline gap-5 border-b border-white/10 py-4 font-display text-4xl text-ivory outline-none transition-colors hover:text-gold-300 focus-visible:text-gold-300 sm:text-5xl"
+                  >
+                    <span className="font-sans text-[0.6rem] tracking-luxury text-gold-400">
+                      0{index + 1}
+                    </span>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <p className="mt-14 text-[0.6rem] uppercase tracking-luxury text-mist/50">
+            Paris · Grasse · Since 1927
+          </p>
+          <div className="mt-8 flex gap-4">
+            <Link href="/login" onClick={() => setIsOpen(false)} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
+              Account
+            </Link>
+            <Link href="/cart" onClick={() => setIsOpen(false)} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
+              Bag ({itemCount})
+            </Link>
+          </div>
+        </Container>
+      </div>
+    </header>
+  );
+}
+
+function NavLink({ href, children }: { href: string; children: string }) {
+  return (
+    <Link
+      href={href}
+      className="group relative py-2 text-[0.62rem] font-medium uppercase tracking-luxury text-ivory/70 outline-none transition-colors duration-300 hover:text-ivory focus-visible:text-ivory"
+    >
+      {children}
+      <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gold-400 transition-transform duration-500 ease-luxury group-hover:scale-x-100 group-focus-visible:scale-x-100" />
+    </Link>
+  );
+}
