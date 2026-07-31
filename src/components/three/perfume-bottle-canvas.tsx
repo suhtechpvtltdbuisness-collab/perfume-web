@@ -1,11 +1,13 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Float, RoundedBox } from "@react-three/drei";
+import { ContactShadows, Environment, Float, RoundedBox } from "@react-three/drei";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import {
   AdditiveBlending,
+  CanvasTexture,
   Group,
+  LinearFilter,
   MathUtils,
   Points,
   PointsMaterial,
@@ -22,7 +24,7 @@ function Mist({ progress }: { progress: MutableRefObject<number> }) {
       const angle = index * 2.399;
       const spread = 0.06 + distance * 0.34;
       data[index * 3] = Math.cos(angle) * spread + distance;
-      data[index * 3 + 1] = 1.45 + Math.sin(angle * 1.7) * spread * 0.62;
+      data[index * 3 + 1] = Math.sin(angle * 1.7) * spread * 0.62;
       data[index * 3 + 2] = Math.sin(angle) * spread;
     }
     return data;
@@ -38,7 +40,7 @@ function Mist({ progress }: { progress: MutableRefObject<number> }) {
   });
 
   return (
-    <points ref={points} position={[0.3, 0, 0]}>
+    <points ref={points} position={[0.3, 1.92, 0]}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
@@ -73,50 +75,115 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
     bottle.current.rotation.y = clock.elapsedTime * 0.16 + value * Math.PI * 1.25 + pointer.x * 0.12;
     bottle.current.rotation.x = pointer.y * 0.06;
     bottle.current.position.x = MathUtils.lerp(0, -1.5, MathUtils.smoothstep(value, 0.55, 0.82));
-    bottle.current.position.y = -0.48;
-    bottle.current.scale.setScalar(MathUtils.lerp(0.88, 1.24, value));
+    bottle.current.position.y = -0.62;
+    bottle.current.scale.setScalar(MathUtils.lerp(0.72, 1.02, value));
   });
 
   return (
     <group ref={bottle}>
-      <RoundedBox args={[2.15, 3.35, 1.05]} radius={0.22} smoothness={8} position={[0, 0, 0]}>
+      <RoundedBox
+        args={[1.86, 3.18, 0.86]}
+        radius={0.18}
+        smoothness={10}
+        position={[0, 0, 0]}
+        castShadow
+      >
         <meshPhysicalMaterial
-          color="#2b2118"
-          transmission={0.62}
-          thickness={1.6}
-          roughness={0.12}
-          metalness={0.08}
-          ior={1.5}
+          color="#1c1712"
+          transmission={0.72}
+          thickness={1.85}
+          roughness={0.08}
+          metalness={0.04}
+          ior={1.52}
           clearcoat={1}
+          clearcoatRoughness={0.05}
         />
       </RoundedBox>
-      <mesh position={[0, -1.26, 0]}>
-        <boxGeometry args={[1.84, 0.32, 0.84]} />
-        <meshStandardMaterial color="#8a5a26" roughness={0.25} metalness={0.5} />
+      <mesh position={[0, -1.22, 0]}>
+        <boxGeometry args={[1.58, 0.38, 0.68]} />
+        <meshStandardMaterial color="#6f451d" roughness={0.2} metalness={0.4} />
       </mesh>
-      <mesh position={[0, 0.02, 0.56]}>
-        <boxGeometry args={[1.5, 1.12, 0.035]} />
-        <meshStandardMaterial color="#090909" roughness={0.5} />
+      <mesh position={[0, -0.03, 0.455]}>
+        <boxGeometry args={[1.26, 0.94, 0.035]} />
+        <meshStandardMaterial color="#070604" roughness={0.3} metalness={0.15} />
       </mesh>
-      <mesh position={[0, 0.02, 0.585]}>
-        <planeGeometry args={[1.18, 0.82]} />
-        <meshStandardMaterial color="#c6a86a" metalness={0.72} roughness={0.28} />
+      <LabelFrame />
+      <mesh position={[0, 1.69, 0]}>
+        <cylinderGeometry args={[0.29, 0.34, 0.2, 48]} />
+        <meshPhysicalMaterial color="#11100e" metalness={0.72} roughness={0.16} clearcoat={1} />
+      </mesh>
+      <mesh position={[0, 1.79, 0]}>
+        <cylinderGeometry args={[0.31, 0.31, 0.055, 48]} />
+        <meshStandardMaterial color="#c6aa69" metalness={0.95} roughness={0.14} />
       </mesh>
       <group ref={atomizer} position={[0, 1.92, 0]}>
         <mesh>
-          <cylinderGeometry args={[0.3, 0.3, 0.25, 32]} />
+          <cylinderGeometry args={[0.25, 0.25, 0.22, 32]} />
           <meshStandardMaterial color="#b69b63" metalness={0.92} roughness={0.16} />
         </mesh>
-        <mesh position={[0.16, 0.04, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.06, 0.06, 0.38, 20]} />
+        <mesh position={[0.14, 0.04, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.045, 0.045, 0.32, 20]} />
           <meshStandardMaterial color="#d4ba7a" metalness={1} roughness={0.12} />
         </mesh>
       </group>
       <group ref={cap} position={[0, 2.25, 0]}>
-        <RoundedBox args={[0.95, 0.9, 0.78]} radius={0.08} smoothness={6}>
-          <meshStandardMaterial color="#16130f" metalness={0.82} roughness={0.18} />
+        <RoundedBox args={[0.78, 0.76, 0.66]} radius={0.055} smoothness={8} castShadow>
+          <meshPhysicalMaterial color="#0b0a08" metalness={0.92} roughness={0.12} clearcoat={1} />
         </RoundedBox>
       </group>
+      <Mist progress={progress} />
+    </group>
+  );
+}
+
+function LabelFrame() {
+  const texture = useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 768;
+    canvas.height = 560;
+    const context = canvas.getContext("2d");
+    if (!context) return null;
+
+    const gradient = context.createLinearGradient(0, 0, 768, 560);
+    gradient.addColorStop(0, "#17140f");
+    gradient.addColorStop(0.5, "#050504");
+    gradient.addColorStop(1, "#15110c");
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 768, 560);
+    context.strokeStyle = "#d5b974";
+    context.lineWidth = 7;
+    context.strokeRect(18, 18, 732, 524);
+    context.textAlign = "center";
+    context.fillStyle = "#ead59d";
+    context.font = "58px Georgia";
+    context.fillText("A U R É L I A", 384, 235);
+    context.fillStyle = "#b69b63";
+    context.font = "20px Arial";
+    context.fillText("M A I S O N   D E   P A R F U M", 384, 292);
+    context.fillStyle = "#8e7950";
+    context.font = "16px Arial";
+    context.fillText("E X T R A I T   ·   7 5  M L", 384, 430);
+
+    const canvasTexture = new CanvasTexture(canvas);
+    canvasTexture.minFilter = LinearFilter;
+    canvasTexture.magFilter = LinearFilter;
+    canvasTexture.anisotropy = 4;
+    return canvasTexture;
+  }, []);
+
+  const material = <meshStandardMaterial color="#d6bb79" metalness={0.9} roughness={0.18} />;
+  return (
+    <group position={[0, -0.03, 0.48]}>
+      {texture && (
+        <mesh position={[0, 0, 0.012]}>
+          <planeGeometry args={[1.08, 0.82]} />
+          <meshStandardMaterial map={texture} roughness={0.28} metalness={0.22} />
+        </mesh>
+      )}
+      <mesh position={[0, 0.43, 0]}><boxGeometry args={[1.12, 0.018, 0.014]} />{material}</mesh>
+      <mesh position={[0, -0.43, 0]}><boxGeometry args={[1.12, 0.018, 0.014]} />{material}</mesh>
+      <mesh position={[-0.55, 0, 0]}><boxGeometry args={[0.018, 0.86, 0.014]} />{material}</mesh>
+      <mesh position={[0.55, 0, 0]}><boxGeometry args={[0.018, 0.86, 0.014]} />{material}</mesh>
     </group>
   );
 }
@@ -130,17 +197,25 @@ function Scene({ progress }: { progress: MutableRefObject<number> }) {
 
   return (
     <>
-      <ambientLight intensity={0.3} />
-      <spotLight position={[4, 7, 5]} intensity={70} color="#ffe1a2" angle={0.35} penumbra={1} />
-      <spotLight position={[-5, 1, 3]} intensity={45} color="#8f7252" angle={0.6} penumbra={1} />
-      <pointLight position={[0, -2, 2]} intensity={18} color="#c38a35" />
+      <ambientLight intensity={0.22} />
+      <spotLight position={[4, 7, 5]} intensity={82} color="#ffe3aa" angle={0.32} penumbra={1} castShadow />
+      <spotLight position={[-4, 2, 4]} intensity={38} color="#9c7a54" angle={0.48} penumbra={1} />
+      <pointLight position={[0, -2.4, 2]} intensity={22} color="#d49a42" />
+      <pointLight position={[2.8, 0, -2]} intensity={14} color="#6f87a2" />
       <Float speed={1.2} rotationIntensity={0.08} floatIntensity={0.12}>
         <Bottle progress={progress} />
       </Float>
-      <Mist progress={progress} />
       <Suspense fallback={null}>
         <Environment preset="warehouse" />
       </Suspense>
+      <ContactShadows
+        position={[0, -2.72, 0]}
+        opacity={0.34}
+        scale={5.5}
+        blur={3}
+        far={4}
+        color="#4b351e"
+      />
       <EffectComposer>
         <Bloom luminanceThreshold={0.68} intensity={1.2} mipmapBlur />
         <Vignette eskil={false} offset={0.12} darkness={0.78} />
@@ -158,6 +233,7 @@ export function PerfumeBottleCanvas({
     <Canvas
       camera={{ position: [0, 0, 8.2], fov: 38 }}
       dpr={[1, 1.6]}
+      shadows
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.setClearColor("#000000", 0);
