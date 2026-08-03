@@ -4,7 +4,9 @@ import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { Film, GripVertical, ImageIcon, Trash2, UploadCloud } from "lucide-react";
 import Image from "next/image";
 
+import { useAuth } from "@/components/providers/auth-provider";
 import { deleteMediaBlob, saveMediaBlob } from "@/lib/media-store";
+import { perfumeApi } from "@/lib/perfume-api";
 import { useMediaUrl } from "@/hooks/use-media-url";
 import type { ProductMedia } from "@/types/product";
 import { cn } from "@/lib/utils";
@@ -17,6 +19,7 @@ export function MediaUploader({
   onChange: (media: ProductMedia[]) => void;
 }) {
   const input = useRef<HTMLInputElement>(null);
+  const { accessToken } = useAuth();
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -37,12 +40,21 @@ export function MediaUploader({
         setMessage(`${file.name} skipped. Images: 15 MB max, videos: 100 MB max.`);
         continue;
       }
-      const id = crypto.randomUUID();
-      await saveMediaBlob(id, file);
-      accepted.push({ id, name: file.name, type });
+
+      try {
+        if (accessToken) {
+          accepted.push(await perfumeApi.upload(file, accessToken));
+        } else {
+          const id = crypto.randomUUID();
+          await saveMediaBlob(id, file);
+          accepted.push({ id, name: file.name, type });
+        }
+      } catch (error) {
+        setMessage(error instanceof Error ? error.message : `Failed to upload ${file.name}`);
+      }
     }
 
-    onChange([...value, ...accepted]);
+    if (accepted.length) onChange([...value, ...accepted]);
     setUploading(false);
   };
 
@@ -58,7 +70,7 @@ export function MediaUploader({
   };
 
   const remove = async (asset: ProductMedia) => {
-    await deleteMediaBlob(asset.id);
+    if (!asset.url) await deleteMediaBlob(asset.id);
     onChange(value.filter((item) => item.id !== asset.id));
   };
 
@@ -71,7 +83,7 @@ export function MediaUploader({
       <div className="mb-3">
         <p className="text-[0.5rem] uppercase tracking-luxury text-mist/60">Product gallery</p>
         <p className="mt-1 text-xs leading-5 text-mist/35">
-          Multiple images or videos select karo. Pehli image collection cover hogi.
+          Images upload to cloud storage. The first asset becomes the collection cover.
         </p>
       </div>
       <div
@@ -121,7 +133,9 @@ function AdminMediaItem({
   onCover: () => void;
   onRemove: () => void;
 }) {
-  const url = useMediaUrl(asset.id);
+  const localUrl = useMediaUrl(asset.url ? undefined : asset.id);
+  const url = asset.url ?? localUrl;
+
   return (
     <div className="group relative flex items-center gap-3 border border-white/10 bg-black/40 p-3">
       <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden bg-white/[0.04]">

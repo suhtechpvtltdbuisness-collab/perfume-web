@@ -10,8 +10,8 @@ import { SiteContentProvider } from "@/components/providers/site-content-provide
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
     <ExperienceProvider>
-      <SiteContentProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <SiteContentProvider>
           <CartProvider>
             <a
               href="#main-content"
@@ -23,8 +23,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <main id="main-content">{children}</main>
             <Footer />
           </CartProvider>
-        </AuthProvider>
-      </SiteContentProvider>
+        </SiteContentProvider>
+      </AuthProvider>
     </ExperienceProvider>
   );
 }

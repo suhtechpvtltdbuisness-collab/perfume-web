@@ -9,7 +9,8 @@ import { BottleArt } from "@/components/ui/bottle-art";
 
 export function ProductCover({ product, className }: { product: Product; className?: string }) {
   const cover = product.media?.[0];
-  const url = useMediaUrl(cover?.id);
+  const localUrl = useMediaUrl(cover?.url ? undefined : cover?.id);
+  const url = cover?.url ?? localUrl;
 
   if (!cover || !url) {
     return <BottleArt accent={product.accent} name={product.name} className={className} />;

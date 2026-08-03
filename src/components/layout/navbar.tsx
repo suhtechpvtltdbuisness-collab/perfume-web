@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingBag, UserRound } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 
 import { navigationItems } from "@/constants/navigation";
 import { useScrollDirection } from "@/hooks/use-scroll-direction";
@@ -11,11 +11,16 @@ import { Container } from "@/components/ui/container";
 import { MenuButton } from "@/components/ui/menu-button";
 import { Wordmark } from "@/components/ui/wordmark";
 import { useCart } from "@/components/providers/cart-provider";
+import { AccountMenu } from "@/components/layout/account-menu";
+import { useAuth } from "@/components/providers/auth-provider";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const scrollDirection = useScrollDirection();
   const { itemCount } = useCart();
+  const { isAuthenticated, isReady, logout, user } = useAuth();
+  const isAdmin = isReady && isAuthenticated && user?.role === "admin";
+  const closeMenu = () => setIsOpen(false);
 
   useEffect(() => {
     document.body.classList.toggle("overflow-hidden", isOpen);
@@ -49,10 +54,18 @@ export function Navbar() {
                 <NavLink href={item.href}>{item.label}</NavLink>
               </li>
             ))}
+            {isAdmin && (
+              <li>
+                <Link
+                  href="/admin"
+                  className="border border-gold-300/40 px-4 py-2 text-[0.52rem] font-semibold uppercase tracking-luxury text-gold-300 transition hover:border-gold-300 hover:bg-gold-300 hover:text-ink"
+                >
+                  Admin dashboard
+                </Link>
+              </li>
+            )}
             <li>
-              <Link href="/login" aria-label="Account" className="block p-2 text-ivory/70 transition hover:text-gold-300">
-                <UserRound className="size-4" />
-              </Link>
+              <AccountMenu />
             </li>
             <li>
               <Link href="/cart" aria-label={`Shopping bag with ${itemCount} items`} className="relative block p-2 text-ivory/70 transition hover:text-gold-300">
@@ -108,11 +121,33 @@ export function Navbar() {
           <p className="mt-14 text-[0.6rem] uppercase tracking-luxury text-mist/50">
             Paris · Grasse · Since 1927
           </p>
-          <div className="mt-8 flex gap-4">
-            <Link href="/login" onClick={() => setIsOpen(false)} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
-              Account
-            </Link>
-            <Link href="/cart" onClick={() => setIsOpen(false)} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            {isAdmin && (
+              <Link
+                href="/admin"
+                onClick={closeMenu}
+                className="border border-gold-300/40 px-4 py-2 text-[0.58rem] uppercase tracking-luxury text-gold-300"
+              >
+                Admin dashboard
+              </Link>
+            )}
+            {isAuthenticated ? (
+              <button
+                type="button"
+                onClick={() => {
+                  closeMenu();
+                  void logout();
+                }}
+                className="text-[0.58rem] uppercase tracking-luxury text-gold-300"
+              >
+                Log out
+              </button>
+            ) : (
+              <Link href="/login" onClick={closeMenu} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
+                Account
+              </Link>
+            )}
+            <Link href="/cart" onClick={closeMenu} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
               Bag ({itemCount})
             </Link>
           </div>

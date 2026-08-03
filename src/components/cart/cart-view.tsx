@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
 
 import { useCart } from "@/components/providers/cart-provider";
-import { BottleArt } from "@/components/ui/bottle-art";
+import { ProductThumbnail } from "@/components/product/product-thumbnail";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/constants/products";
 
@@ -25,22 +25,33 @@ export function CartView() {
     <div className="grid gap-14 lg:grid-cols-[1fr_22rem]">
       <div className="divide-y divide-white/10 border-y border-white/10">
         {items.map(({ product, quantity }) => (
-          <article key={product.id} className="grid grid-cols-[7rem_1fr] gap-5 py-7 sm:grid-cols-[10rem_1fr]">
-            <BottleArt accent={product.accent} name={product.name} className="bg-[#080808]" />
-            <div className="flex flex-col justify-between sm:flex-row sm:items-center">
-              <div>
-                <Link href={`/products/${product.slug}`} className="font-display text-2xl hover:text-gold-300">
-                  {product.name}
-                </Link>
-                <p className="mt-2 text-[0.52rem] uppercase tracking-luxury text-mist/45">{product.size}</p>
-                <p className="mt-4 text-xs text-ivory/75">{formatPrice(product.price)}</p>
+          <article key={product.id} className="grid grid-cols-[7rem_1fr] gap-5 py-7 sm:grid-cols-[10rem_1fr_auto] sm:items-center">
+            <Link href={`/products/${product.slug}`} className="block border border-white/10">
+              <ProductThumbnail product={product} />
+            </Link>
+            <div>
+              <p className="text-[0.48rem] uppercase tracking-luxury text-gold-300">{product.family}</p>
+              <Link href={`/products/${product.slug}`} className="mt-2 block font-display text-2xl hover:text-gold-300 sm:text-3xl">
+                {product.name}
+              </Link>
+              <p className="mt-2 text-[0.52rem] uppercase tracking-luxury text-mist/45">
+                {product.subtitle} · {product.size}
+              </p>
+              {product.notes?.length > 0 && (
+                <p className="mt-3 line-clamp-1 text-xs text-mist/50">
+                  {product.notes.filter(Boolean).join(" · ")}
+                </p>
+              )}
+              <p className="mt-4 text-sm text-ivory/80">{formatPrice(product.price)}</p>
+            </div>
+            <div className="col-span-2 flex items-center justify-between gap-5 sm:col-span-1 sm:flex-col sm:items-end">
+              <div className="flex items-center border border-white/10">
+                <button aria-label="Decrease quantity" onClick={() => updateQuantity(product.id, quantity - 1)} className="p-3 text-mist hover:text-ivory"><Minus className="size-3" /></button>
+                <span className="min-w-8 text-center text-xs">{quantity}</span>
+                <button aria-label="Increase quantity" onClick={() => updateQuantity(product.id, quantity + 1)} className="p-3 text-mist hover:text-ivory"><Plus className="size-3" /></button>
               </div>
-              <div className="mt-5 flex items-center gap-5 sm:mt-0">
-                <div className="flex items-center border border-white/10">
-                  <button aria-label="Decrease quantity" onClick={() => updateQuantity(product.id, quantity - 1)} className="p-3 text-mist hover:text-ivory"><Minus className="size-3" /></button>
-                  <span className="min-w-8 text-center text-xs">{quantity}</span>
-                  <button aria-label="Increase quantity" onClick={() => updateQuantity(product.id, quantity + 1)} className="p-3 text-mist hover:text-ivory"><Plus className="size-3" /></button>
-                </div>
+              <div className="flex items-center gap-4">
+                <p className="text-sm text-ivory/70">{formatPrice(product.price * quantity)}</p>
                 <button aria-label={`Remove ${product.name}`} onClick={() => removeItem(product.id)} className="p-2 text-mist/45 hover:text-ivory">
                   <Trash2 className="size-4" />
                 </button>

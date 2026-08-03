@@ -27,9 +27,14 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     const name = String(data.get("name") ?? "").trim();
 
     try {
-      if (mode === "register") await register(name, email, password);
-      else await login(email, password);
-      router.push("/shop");
+      if (mode === "register") {
+        await register(name, email, password);
+        router.push("/shop");
+        return;
+      }
+
+      const user = await login(email, password);
+      router.push(user.role === "admin" ? "/admin" : "/shop");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Something went wrong");
     } finally {

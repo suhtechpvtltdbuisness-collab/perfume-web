@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 
+import { useSiteContent } from "@/components/providers/site-content-provider";
 import type { Product } from "@/types/product";
 
 interface CartItem {
@@ -31,6 +32,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 const storageKey = "autoroma-cart";
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { products, productsLoading } = useSiteContent();
   const [items, setItems] = useState<CartItem[]>([]);
   const [isReady, setIsReady] = useState(false);
 
@@ -49,6 +51,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (!isReady || productsLoading || products.length === 0) return;
+    setItems((current) => {
+      const next = current
+        .map((item) => {
+          const fresh = products.find((product) => product.id === item.product.id);
+          return fresh ? { ...item, product: fresh } : null;
+        })
+        .filter((item): item is CartItem => item !== null);
+
+      if (
+        next.length === current.length &&
+        next.every(
+          (item, index) =>
+            item.quantity === current[index]?.quantity &&
+            item.product === current[index]?.product,
+        )
+      ) {
+        return current;
+      }
+      return next;
+    });
+  }, [isReady, products, productsLoading]);
+
+  useEffect(() => {
     if (isReady) window.localStorage.setItem(storageKey, JSON.stringify(items));
   }, [isReady, items]);
 
@@ -58,7 +84,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return existing
         ? current.map((item) =>
             item.product.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
+              ? { ...item, quantity: item.quantity + 1, product }
               : item,
           )
         : [...current, { product, quantity: 1 }];

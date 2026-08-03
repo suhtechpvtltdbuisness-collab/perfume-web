@@ -52,7 +52,8 @@ export function ProductMediaGallery({ product }: { product: Product }) {
 }
 
 function GalleryStage({ asset, productName }: { asset: ProductMedia; productName: string }) {
-  const url = useMediaUrl(asset.id);
+  const localUrl = useMediaUrl(asset.url ? undefined : asset.id);
+  const url = asset.url ?? localUrl;
   return (
     <motion.div
       initial={{ opacity: 0, scale: 1.035, filter: "blur(8px)" }}
@@ -74,7 +75,8 @@ function GalleryStage({ asset, productName }: { asset: ProductMedia; productName
 }
 
 function GalleryThumbnail({ asset, active, onClick }: { asset: ProductMedia; active: boolean; onClick: () => void }) {
-  const url = useMediaUrl(asset.id);
+  const localUrl = useMediaUrl(asset.url ? undefined : asset.id);
+  const url = asset.url ?? localUrl;
   return (
     <button
       type="button"

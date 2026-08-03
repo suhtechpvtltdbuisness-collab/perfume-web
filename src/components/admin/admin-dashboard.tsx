@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { LayoutDashboard, LogOut, Package, Pencil, Plus, RotateCcw, Trash2 } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
@@ -10,7 +11,7 @@ import { ApiError } from "@/lib/auth-api";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types/product";
 import type { LandingContent } from "@/types/site-content";
-import { MediaUploader } from "@/components/admin/media-uploader";
+import { PerfumeFormModal } from "@/components/admin/perfume-form-modal";
 
 type AdminView = "overview" | "landing" | "products";
 
@@ -26,20 +27,37 @@ const emptyProduct: Product = {
   notes: ["", "", ""],
   accent: "bg-[#8b5a3c]",
   featured: false,
+  media: [],
 };
 
 export function AdminDashboard() {
   const content = useSiteContent();
+  const router = useRouter();
   const { user, isReady, logout } = useAuth();
   const [view, setView] = useState<AdminView>("overview");
   const [editor, setEditor] = useState<Product | null>(null);
 
   const authenticated = isReady && user?.role === "admin";
 
+  useEffect(() => {
+    if (!isReady) return;
+    if (user && user.role !== "admin") {
+      router.replace("/shop");
+    }
+  }, [isReady, router, user]);
+
   if (!isReady) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-ink text-sm text-mist/50">
         Checking access…
+      </div>
+    );
+  }
+
+  if (user && user.role !== "admin") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-ink text-sm text-mist/50">
+        Redirecting…
       </div>
     );
   }
@@ -96,7 +114,7 @@ export function AdminDashboard() {
               <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                 <AdminHeading eyebrow="Catalogue" title="Products" description="Add, edit, feature or remove fragrances." />
                 <Button onClick={() => setEditor({ ...emptyProduct, id: crypto.randomUUID() })}>
-                  <Plus className="size-4" /> New product
+                  <Plus className="size-4" /> Add perfume
                 </Button>
               </div>
               <div className="mt-10 overflow-x-auto border border-white/10">
@@ -115,7 +133,11 @@ export function AdminDashboard() {
                           <div className="flex justify-end gap-2">
                             <button aria-label={`Edit ${product.name}`} onClick={() => setEditor(product)} className="border border-white/10 p-2.5 text-mist/60 hover:border-gold-300/40 hover:text-gold-300"><Pencil className="size-3.5" /></button>
                             <button aria-label={`Delete ${product.name}`} onClick={() => {
-                              if (window.confirm(`Delete ${product.name}?`)) content.deleteProduct(product.id);
+                              if (window.confirm(`Delete ${product.name}?`)) {
+                                void content.deleteProduct(product.id).catch((error: unknown) => {
+                                  window.alert(error instanceof Error ? error.message : "Failed to delete perfume");
+                                });
+                              }
                             }} className="border border-white/10 p-2.5 text-mist/60 hover:border-red-400/40 hover:text-red-300"><Trash2 className="size-3.5" /></button>
                           </div>
                         </td>
@@ -130,11 +152,11 @@ export function AdminDashboard() {
       </div>
 
       {editor && (
-        <ProductEditor
+        <PerfumeFormModal
           product={editor}
           onClose={() => setEditor(null)}
-          onSave={(product) => {
-            content.saveProduct(product);
+          onSave={async (product) => {
+            await content.saveProduct(product);
             setEditor(null);
           }}
         />
@@ -144,6 +166,7 @@ export function AdminDashboard() {
 }
 
 function AdminLogin() {
+  const router = useRouter();
   const { adminLogin } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -155,6 +178,7 @@ function AdminLogin() {
     const data = new FormData(event.currentTarget);
     try {
       await adminLogin(String(data.get("password") ?? ""));
+      router.replace("/admin");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Invalid admin credentials");
     } finally {
@@ -257,46 +281,6 @@ function LandingEditor({ value, onSave, onReset }: { value: LandingContent; onSa
       </form>
     </>
   );
-}
-
-function ProductEditor({ product, onClose, onSave }: { product: Product; onClose: () => void; onSave: (product: Product) => void }) {
-  const [draft, setDraft] = useState(product);
-  const field = (key: keyof Product, value: Product[keyof Product]) =>
-    setDraft((current) => ({ ...current, [key]: value }) as Product);
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const slug = draft.slug || draft.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
-    onSave({ ...draft, slug });
-  };
-  return (
-    <div className="fixed inset-0 z-[160] flex justify-end overflow-hidden bg-black/75 backdrop-blur-sm">
-      <form
-        onSubmit={submit}
-        data-lenis-prevent
-        className="h-dvh w-full max-w-xl touch-pan-y overflow-y-auto overscroll-contain border-l border-white/10 bg-obsidian p-7 pb-24 sm:p-10 sm:pb-28"
-      >
-        <div className="flex items-center justify-between"><h2 className="font-display text-4xl">{product.name ? "Edit product" : "New product"}</h2><button type="button" onClick={onClose} className="text-xs uppercase tracking-luxury text-mist/50">Close</button></div>
-        <div className="mt-9 grid gap-5 sm:grid-cols-2">
-          <EditorField label="Name" value={draft.name} onChange={(value) => field("name", value)} wide />
-          <EditorField label="Subtitle" value={draft.subtitle} onChange={(value) => field("subtitle", value)} />
-          <EditorField label="Family" value={draft.family} onChange={(value) => field("family", value)} />
-          <EditorField label="Price" value={String(draft.price)} type="number" onChange={(value) => field("price", Number(value))} />
-          <EditorField label="Size" value={draft.size} onChange={(value) => field("size", value)} />
-          <EditorField label="Description" value={draft.description} onChange={(value) => field("description", value)} wide />
-          <EditorField label="Top note" value={draft.notes[0] ?? ""} onChange={(value) => field("notes", [value, draft.notes[1] ?? "", draft.notes[2] ?? ""])} />
-          <EditorField label="Heart note" value={draft.notes[1] ?? ""} onChange={(value) => field("notes", [draft.notes[0] ?? "", value, draft.notes[2] ?? ""])} />
-          <EditorField label="Base note" value={draft.notes[2] ?? ""} onChange={(value) => field("notes", [draft.notes[0] ?? "", draft.notes[1] ?? "", value])} />
-          <label className="flex items-center gap-3 self-end pb-4 text-xs text-mist/60"><input type="checkbox" checked={draft.featured ?? false} onChange={(event) => field("featured", event.target.checked)} /> Feature on homepage</label>
-          <MediaUploader value={draft.media ?? []} onChange={(media) => field("media", media)} />
-        </div>
-        <Button type="submit" className="mt-8 w-full">Save product</Button>
-      </form>
-    </div>
-  );
-}
-
-function EditorField({ label, value, onChange, type = "text", wide = false }: { label: string; value: string; onChange: (value: string) => void; type?: string; wide?: boolean }) {
-  return <label className={wide ? "sm:col-span-2" : ""}><span className="mb-2 block text-[0.5rem] uppercase tracking-luxury text-mist/50">{label}</span><input type={type} required value={value} onChange={(event) => onChange(event.target.value)} className="h-14 w-full border border-white/10 bg-black/40 px-4 text-sm outline-none focus:border-gold-300/60" /></label>;
 }
 
 function AdminHeading({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {

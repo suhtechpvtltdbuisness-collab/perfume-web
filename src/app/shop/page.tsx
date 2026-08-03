@@ -20,7 +20,7 @@ export default function ShopPage() {
             </h1>
           </div>
           <p className="max-w-md text-sm leading-7 text-mist/60 lg:justify-self-end">
-            Six compositions built from exceptional materials. Presented here as demo products, ready to be replaced with your final catalogue.
+            Every composition from the maison, drawn live from the catalogue. Filter by olfactory family and discover the scent that remains.
           </p>
         </div>
         <ShopGrid />
