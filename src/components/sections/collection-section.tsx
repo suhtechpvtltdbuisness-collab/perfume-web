@@ -10,7 +10,7 @@ import { Reveal } from "@/components/animations/reveal";
 export function CollectionSection() {
   const { products } = useSiteContent();
   const featured = products.filter((product) => product.featured);
-  const visible = (featured.length >= 3 ? featured : products).slice(0, 3);
+  const visible = (featured.length >= 4 ? featured : products).slice(0, 4);
 
   return (
     <section id="collection" className="bg-ink py-28 sm:py-36 lg:py-44">
@@ -21,7 +21,7 @@ export function CollectionSection() {
             <Button href="/shop" variant="outline" showArrow>View all fragrances</Button>
           </div>
         </Reveal>
-        <div className="mt-16 grid gap-x-6 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-x-6 gap-y-14 md:grid-cols-2 xl:grid-cols-4">
           {visible.map((product, index) => (
             <Reveal key={product.id} delay={index * 0.1}>
               <ProductCard product={product} />

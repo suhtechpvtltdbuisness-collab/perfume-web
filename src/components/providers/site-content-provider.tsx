@@ -32,7 +32,9 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
     const hydrate = window.setTimeout(() => {
       try {
         const stored = window.localStorage.getItem(storageKey);
-        if (stored) setContent(JSON.parse(stored) as ManagedSiteContent);
+        if (stored) {
+          setContent(JSON.parse(stored) as ManagedSiteContent);
+        }
       } catch {
         window.localStorage.removeItem(storageKey);
       } finally {
