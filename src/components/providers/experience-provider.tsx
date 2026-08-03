@@ -13,7 +13,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timer = window.setTimeout(() => setLoading(false), reduced ? 50 : 1500);
+    const timer = window.setTimeout(() => setLoading(false), reduced ? 50 : 2800);
     if (reduced) return () => window.clearTimeout(timer);
 
     const lenis = new Lenis({ duration: 1.15, smoothWheel: true });

@@ -43,7 +43,7 @@ const config: Config = {
       animation: {
         "line-in": "line-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both",
         marquee: "marquee 34s linear infinite",
-        "car-load": "car-load 1.45s cubic-bezier(0.3, 0.05, 0.22, 1) both",
+        "car-load": "car-load 2.65s cubic-bezier(0.3, 0.05, 0.22, 1) both",
         "wheel-spin": "wheel-spin 240ms linear infinite",
         "flame-outer": "flame-outer 110ms ease-in-out infinite alternate",
         "flame-inner": "flame-inner 80ms ease-in-out infinite alternate-reverse",
