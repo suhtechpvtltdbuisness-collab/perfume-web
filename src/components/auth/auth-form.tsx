@@ -1,29 +1,57 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
+import { ApiError, authApi } from "@/lib/auth-api";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
-  const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
+  const { login, register } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState<string | null>(null);
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    setError(null);
+    setResetMessage(null);
+    setLoading(true);
+
+    const data = new FormData(event.currentTarget);
+    const email = String(data.get("email") ?? "").trim();
+    const password = String(data.get("password") ?? "");
+    const name = String(data.get("name") ?? "").trim();
+
+    try {
+      if (mode === "register") await register(name, email, password);
+      else await login(email, password);
+      router.push("/shop");
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (submitted) {
-    return (
-      <div className="border border-gold-300/30 bg-gold-300/[0.05] p-8 text-center">
-        <p className="font-display text-3xl text-gold-300">Welcome to the maison.</p>
-        <p className="mt-4 text-sm leading-6 text-mist/60">
-          Demo authentication is working at the interface level. Connect your preferred auth provider when backend credentials are available.
-        </p>
-        <Button href="/shop" variant="outline" className="mt-7">Continue shopping</Button>
-      </div>
-    );
-  }
+  const forgotPassword = async () => {
+    const emailInput = document.getElementById("email") as HTMLInputElement | null;
+    const email = emailInput?.value?.trim() ?? "";
+    if (!email) {
+      setError("Enter your email first");
+      return;
+    }
+    setError(null);
+    try {
+      const res = await authApi.forgotPassword(email);
+      setResetMessage(res.message);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Something went wrong");
+    }
+  };
 
   return (
     <form onSubmit={submit} className="space-y-5">
@@ -32,13 +60,25 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       <Field id="password" label="Password" type="password" />
       {mode === "login" && (
         <div className="text-right">
-          <button type="button" className="text-[0.55rem] uppercase tracking-editorial text-gold-300 hover:text-ivory">
+          <button
+            type="button"
+            onClick={forgotPassword}
+            className="text-[0.55rem] uppercase tracking-editorial text-gold-300 hover:text-ivory"
+          >
             Forgot password?
           </button>
         </div>
       )}
-      <Button type="submit" className="w-full">
-        {mode === "login" ? "Sign in" : "Create account"}
+      {error && <p className="text-xs text-red-300">{error}</p>}
+      {resetMessage && <p className="text-xs text-gold-300">{resetMessage}</p>}
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading
+          ? mode === "login"
+            ? "Signing in…"
+            : "Creating account…"
+          : mode === "login"
+            ? "Sign in"
+            : "Create account"}
       </Button>
       <p className="pt-3 text-center text-xs text-mist/50">
         {mode === "login" ? "New to Autoroma?" : "Already have an account?"}{" "}

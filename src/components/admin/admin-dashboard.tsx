@@ -3,8 +3,10 @@
 import { useState, type FormEvent } from "react";
 import { LayoutDashboard, LogOut, Package, Pencil, Plus, RotateCcw, Trash2 } from "lucide-react";
 
+import { useAuth } from "@/components/providers/auth-provider";
 import { useSiteContent } from "@/components/providers/site-content-provider";
 import { Button } from "@/components/ui/button";
+import { ApiError } from "@/lib/auth-api";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types/product";
 import type { LandingContent } from "@/types/site-content";
@@ -28,12 +30,22 @@ const emptyProduct: Product = {
 
 export function AdminDashboard() {
   const content = useSiteContent();
-  const [authenticated, setAuthenticated] = useState(false);
+  const { user, isReady, logout } = useAuth();
   const [view, setView] = useState<AdminView>("overview");
   const [editor, setEditor] = useState<Product | null>(null);
 
+  const authenticated = isReady && user?.role === "admin";
+
+  if (!isReady) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-ink text-sm text-mist/50">
+        Checking access…
+      </div>
+    );
+  }
+
   if (!authenticated) {
-    return <AdminLogin onSuccess={() => setAuthenticated(true)} />;
+    return <AdminLogin />;
   }
 
   return (
@@ -46,7 +58,7 @@ export function AdminDashboard() {
             <AdminNav active={view === "landing"} onClick={() => setView("landing")} icon={<Pencil className="size-4" />}>Landing page</AdminNav>
             <AdminNav active={view === "products"} onClick={() => setView("products")} icon={<Package className="size-4" />}>Products</AdminNav>
           </nav>
-          <button onClick={() => setAuthenticated(false)} className="mt-12 flex items-center gap-3 text-[0.55rem] uppercase tracking-editorial text-mist/45 hover:text-ivory">
+          <button onClick={() => void logout()} className="mt-12 flex items-center gap-3 text-[0.55rem] uppercase tracking-editorial text-mist/45 hover:text-ivory">
             <LogOut className="size-4" /> Sign out
           </button>
         </aside>
@@ -131,14 +143,25 @@ export function AdminDashboard() {
   );
 }
 
-function AdminLogin({ onSuccess }: { onSuccess: () => void }) {
-  const [error, setError] = useState(false);
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+function AdminLogin() {
+  const { adminLogin } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError(null);
+    setLoading(true);
     const data = new FormData(event.currentTarget);
-    if (data.get("password") === "admin") onSuccess();
-    else setError(true);
+    try {
+      await adminLogin(String(data.get("password") ?? ""));
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Invalid admin credentials");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink px-5">
       <form onSubmit={submit} className="w-full max-w-sm border border-white/10 bg-white/[0.025] p-8">
@@ -146,8 +169,10 @@ function AdminLogin({ onSuccess }: { onSuccess: () => void }) {
         <h1 className="mt-4 text-center font-display text-4xl">Admin access</h1>
         <label htmlFor="admin-password" className="mt-8 block text-[0.5rem] uppercase tracking-luxury text-mist/50">Password</label>
         <input id="admin-password" name="password" type="password" required className="mt-2 h-14 w-full border border-white/10 bg-black px-4 text-sm outline-none focus:border-gold-300/60" />
-        {error && <p className="mt-3 text-xs text-red-300">Incorrect password. Demo password: admin</p>}
-        <Button type="submit" className="mt-6 w-full">Enter dashboard</Button>
+        {error && <p className="mt-3 text-xs text-red-300">{error}</p>}
+        <Button type="submit" className="mt-6 w-full" disabled={loading}>
+          {loading ? "Checking…" : "Enter dashboard"}
+        </Button>
       </form>
     </div>
   );
