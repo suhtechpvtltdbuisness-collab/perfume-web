@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 export const metadata: Metadata = { title: "Our Story" };
 
 const timeline = [
-  ["1927", "A house is born", "Émile Aurélia opens a small laboratory in Paris, combining the discipline of Grasse with a modern instinct."],
+  ["1927", "A house is born", "Our founder opens a small laboratory in Paris, combining the discipline of Grasse with a modern instinct."],
   ["1964", "The language of materials", "The maison begins direct partnerships with growers of rose, iris, sandalwood and citrus."],
   ["1998", "A new generation", "A third generation strips the collection back to six signatures, each matured at extrait concentration."],
   ["Today", "Quietly uncompromising", "The same philosophy continues: fewer fragrances, better materials, and no composition released before it feels inevitable."],
@@ -17,7 +17,7 @@ export default function StoryPage() {
     <div className="bg-ink">
       <section className="flex min-h-screen items-end border-b border-white/10 pb-24 pt-40">
         <Container>
-          <p className="text-[0.58rem] uppercase tracking-[0.44em] text-gold-300">The Maison</p>
+          <p className="text-[0.58rem] uppercase tracking-[0.44em] text-gold-300">The House</p>
           <h1 className="mt-6 max-w-6xl text-balance font-display text-[16vw] leading-[0.75] tracking-[-0.06em] sm:text-[9rem] lg:text-[11rem]">
             A century in pursuit of the invisible.
           </h1>

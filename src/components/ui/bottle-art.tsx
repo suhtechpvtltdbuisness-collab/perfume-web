@@ -19,7 +19,7 @@ export function BottleArt({ accent, name, className }: BottleArtProps) {
             {name}
           </span>
           <span className="mt-1 block text-[0.34rem] uppercase tracking-[0.38em] text-gold-300/70">
-            Maison Aurélia
+            Autoroma
           </span>
         </div>
         <div className={cn("absolute inset-x-0 bottom-0 h-1/3 opacity-60 blur-xl", accent)} />

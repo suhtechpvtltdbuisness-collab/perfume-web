@@ -5,7 +5,7 @@ import { ShopGrid } from "@/components/shop/shop-grid";
 
 export const metadata: Metadata = {
   title: "The Collection",
-  description: "Discover the complete Maison Aurélia fragrance collection.",
+  description: "Discover the complete Autoroma fragrance collection.",
 };
 
 export default function ShopPage() {

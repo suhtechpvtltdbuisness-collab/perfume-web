@@ -1,4 +1,4 @@
-# Maison Aurélia
+# Autoroma
 
 A cinematic luxury perfume ecommerce experience built with Next.js, React, TypeScript, Tailwind CSS, Three.js, React Three Fiber, GSAP and Lenis.
 

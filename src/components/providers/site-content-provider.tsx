@@ -22,7 +22,7 @@ interface SiteContentContextValue extends ManagedSiteContent {
 }
 
 const SiteContentContext = createContext<SiteContentContextValue | null>(null);
-const storageKey = "aurelia-site-content";
+const storageKey = "autoroma-site-content";
 
 export function SiteContentProvider({ children }: { children: ReactNode }) {
   const [content, setContent] = useState<ManagedSiteContent>(defaultSiteContent);

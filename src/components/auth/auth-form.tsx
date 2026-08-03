@@ -41,7 +41,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         {mode === "login" ? "Sign in" : "Create account"}
       </Button>
       <p className="pt-3 text-center text-xs text-mist/50">
-        {mode === "login" ? "New to Maison Aurélia?" : "Already have an account?"}{" "}
+        {mode === "login" ? "New to Autoroma?" : "Already have an account?"}{" "}
         <Link href={mode === "login" ? "/register" : "/login"} className="text-gold-300 hover:text-ivory">
           {mode === "login" ? "Create an account" : "Sign in"}
         </Link>

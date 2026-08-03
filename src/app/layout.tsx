@@ -21,10 +21,10 @@ const sansFont = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://maisonaurelia.com"),
+  metadataBase: new URL("https://autoroma.com"),
   title: {
-    default: "Maison Aurélia — Haute Parfumerie",
-    template: "%s | Maison Aurélia",
+    default: "Autoroma — Luxury Fragrances",
+    template: "%s | Autoroma",
   },
   description:
     "An olfactory house devoted to rare materials, timeless rituals, and the art of quiet luxury.",

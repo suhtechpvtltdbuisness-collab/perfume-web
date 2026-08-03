@@ -40,7 +40,7 @@ export function AdminDashboard() {
     <div className="min-h-screen bg-[#080808] pt-24">
       <div className="grid min-h-[calc(100vh-6rem)] lg:grid-cols-[16rem_1fr]">
         <aside className="border-r border-white/10 p-6">
-          <p className="text-[0.5rem] uppercase tracking-luxury text-gold-300">Maison control</p>
+          <p className="text-[0.5rem] uppercase tracking-luxury text-gold-300">Autoroma control</p>
           <nav className="mt-10 space-y-2" aria-label="Admin sections">
             <AdminNav active={view === "overview"} onClick={() => setView("overview")} icon={<LayoutDashboard className="size-4" />}>Overview</AdminNav>
             <AdminNav active={view === "landing"} onClick={() => setView("landing")} icon={<Pencil className="size-4" />}>Landing page</AdminNav>
@@ -142,7 +142,7 @@ function AdminLogin({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink px-5">
       <form onSubmit={submit} className="w-full max-w-sm border border-white/10 bg-white/[0.025] p-8">
-        <p className="text-center text-[0.5rem] uppercase tracking-luxury text-gold-300">Maison control</p>
+        <p className="text-center text-[0.5rem] uppercase tracking-luxury text-gold-300">Autoroma control</p>
         <h1 className="mt-4 text-center font-display text-4xl">Admin access</h1>
         <label htmlFor="admin-password" className="mt-8 block text-[0.5rem] uppercase tracking-luxury text-mist/50">Password</label>
         <input id="admin-password" name="password" type="password" required className="mt-2 h-14 w-full border border-white/10 bg-black px-4 text-sm outline-none focus:border-gold-300/60" />

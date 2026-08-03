@@ -156,10 +156,10 @@ function LabelFrame() {
     context.textAlign = "center";
     context.fillStyle = "#ead59d";
     context.font = "58px Georgia";
-    context.fillText("A U R É L I A", 384, 235);
+    context.fillText("A U T O R O M A", 384, 235);
     context.fillStyle = "#b69b63";
     context.font = "20px Arial";
-    context.fillText("M A I S O N   D E   P A R F U M", 384, 292);
+    context.fillText("L U X U R Y   F R A G R A N C E S", 384, 292);
     context.fillStyle = "#8e7950";
     context.font = "16px Arial";
     context.fillText("E X T R A I T   ·   7 5  M L", 384, 430);

@@ -2,7 +2,7 @@ import type { Product } from "@/types/product";
 
 export const products: Product[] = [
   {
-    id: "aur-001",
+    id: "autoroma-001",
     slug: "nocturne-oud",
     name: "Nocturne Oud",
     subtitle: "Extrait de Parfum",
@@ -16,7 +16,7 @@ export const products: Product[] = [
     featured: true,
   },
   {
-    id: "aur-002",
+    id: "autoroma-002",
     slug: "lumiere-rose",
     name: "Lumière Rose",
     subtitle: "Eau de Parfum",
@@ -30,7 +30,7 @@ export const products: Product[] = [
     featured: true,
   },
   {
-    id: "aur-003",
+    id: "autoroma-003",
     slug: "santal-velours",
     name: "Santal Velours",
     subtitle: "Extrait de Parfum",
@@ -44,7 +44,7 @@ export const products: Product[] = [
     featured: true,
   },
   {
-    id: "aur-004",
+    id: "autoroma-004",
     slug: "ambre-celeste",
     name: "Ambre Céleste",
     subtitle: "Eau de Parfum",
@@ -57,7 +57,7 @@ export const products: Product[] = [
     accent: "bg-[#b47c36]",
   },
   {
-    id: "aur-005",
+    id: "autoroma-005",
     slug: "iris-minuit",
     name: "Iris Minuit",
     subtitle: "Extrait de Parfum",
@@ -70,7 +70,7 @@ export const products: Product[] = [
     accent: "bg-[#625c78]",
   },
   {
-    id: "aur-006",
+    id: "autoroma-006",
     slug: "fleur-de-sel",
     name: "Fleur de Sel",
     subtitle: "Eau de Parfum",

@@ -34,7 +34,7 @@ export function Footer() {
         ))}
       </Container>
       <Container className="flex flex-col gap-4 border-t border-white/[0.06] py-7 text-[0.52rem] uppercase tracking-luxury text-mist/35 sm:flex-row sm:justify-between">
-        <p>© 2026 Maison Aurélia</p>
+        <p>© 2026 Autoroma</p>
         <p>Privacy · Terms · India</p>
       </Container>
     </footer>

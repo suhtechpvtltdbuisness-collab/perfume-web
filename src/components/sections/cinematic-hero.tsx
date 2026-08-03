@@ -88,7 +88,7 @@ export function CinematicHero() {
           </div>
 
           <div ref={finalCopy} className="absolute left-5 top-1/3 max-w-sm opacity-0 sm:left-10 lg:left-20">
-            <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">Maison Aurélia</p>
+            <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">Autoroma</p>
             <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-7xl">
               Crafted to remain.
             </h2>

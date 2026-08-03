@@ -20,7 +20,7 @@ export default function ContactPage() {
           <div className="mt-12 grid gap-8 border-t border-white/10 pt-8 sm:grid-cols-2">
             <div>
               <p className="text-[0.5rem] uppercase tracking-luxury text-gold-400">Email</p>
-              <p className="mt-3 text-sm text-mist/70">care@maisonaurelia.com</p>
+              <p className="mt-3 text-sm text-mist/70">care@autoroma.com</p>
             </div>
             <div>
               <p className="text-[0.5rem] uppercase tracking-luxury text-gold-400">Hours</p>

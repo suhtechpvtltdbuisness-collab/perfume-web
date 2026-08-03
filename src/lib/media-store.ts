@@ -1,4 +1,4 @@
-const databaseName = "aurelia-media";
+const databaseName = "autoroma-media";
 const storeName = "product-assets";
 const databaseVersion = 1;
 
