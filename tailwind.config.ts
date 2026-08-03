@@ -43,6 +43,11 @@ const config: Config = {
       animation: {
         "line-in": "line-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both",
         marquee: "marquee 34s linear infinite",
+        "car-load": "car-load 1.45s cubic-bezier(0.3, 0.05, 0.22, 1) both",
+        "wheel-spin": "wheel-spin 240ms linear infinite",
+        "flame-outer": "flame-outer 110ms ease-in-out infinite alternate",
+        "flame-inner": "flame-inner 80ms ease-in-out infinite alternate-reverse",
+        "road-dash": "road-dash 520ms linear infinite",
       },
       keyframes: {
         "line-in": {
@@ -51,6 +56,25 @@ const config: Config = {
         },
         marquee: {
           to: { transform: "translateX(-50%)" },
+        },
+        "car-load": {
+          from: { transform: "translateX(-22rem) translateY(2px)" },
+          "35%": { transform: "translateX(22vw) translateY(-1px)" },
+          to: { transform: "translateX(calc(100vw + 22rem)) translateY(0)" },
+        },
+        "wheel-spin": {
+          to: { transform: "rotate(360deg)" },
+        },
+        "flame-outer": {
+          from: { transform: "scaleX(0.72) scaleY(0.8)", opacity: "0.72" },
+          to: { transform: "scaleX(1.18) scaleY(1.12)", opacity: "1" },
+        },
+        "flame-inner": {
+          from: { transform: "scaleX(0.75)" },
+          to: { transform: "scaleX(1.12)" },
+        },
+        "road-dash": {
+          to: { transform: "translateX(-8rem)" },
         },
       },
     },

@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import gsap from "gsap";
 
 import { cn } from "@/lib/utils";
+import { SportsCarLoader } from "@/components/ui/sports-car-loader";
 
 export function ExperienceProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -48,13 +49,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
         )}
         aria-hidden={!loading}
       >
-        <div className="text-center">
-          <p className="font-display text-3xl tracking-editorial">AUTOROMA</p>
-          <div className="mx-auto mt-6 h-px w-32 overflow-hidden bg-white/10">
-            <div className="h-full origin-left animate-line-in bg-gold-300" />
-          </div>
-          <p className="mt-4 text-[0.45rem] uppercase tracking-[0.5em] text-gold-300/60">Luxury fragrances</p>
-        </div>
+        <SportsCarLoader />
       </div>
       <div
         ref={cursor}
