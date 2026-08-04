@@ -20,7 +20,7 @@ export default function StoryPage() {
         <Container className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 xl:gap-24">
           <div className="py-4 lg:py-10">
             <p className="text-[0.58rem] uppercase tracking-[0.44em] text-gold-300">The House</p>
-            <h1 className="mt-6 max-w-4xl text-balance font-display text-6xl leading-[0.84] tracking-[-0.055em] sm:text-8xl lg:text-[7rem] xl:text-[8.5rem]">
+            <h1 className="mt-6 max-w-4xl text-balance font-display text-5xl leading-[0.88] tracking-[-0.055em] min-[380px]:text-6xl sm:text-8xl lg:text-[7rem] xl:text-[8.5rem]">
               A century in pursuit of the invisible.
             </h1>
             <p className="mt-8 max-w-md text-sm leading-7 text-mist/60">

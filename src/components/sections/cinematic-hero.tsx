@@ -42,7 +42,7 @@ export function CinematicHero() {
   }, []);
 
   return (
-    <section ref={section} className="relative h-[340vh] bg-black">
+    <section ref={section} className="relative h-[270vh] bg-black sm:h-[310vh] lg:h-[340vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(181,132,60,0.16),transparent_42%)]" />
         <div className="absolute inset-0 bg-transparent"><PerfumeBottleCanvas progress={progress} /></div>
@@ -50,7 +50,7 @@ export function CinematicHero() {
         <Container className="pointer-events-none relative z-10 h-full">
           <div ref={intro} className="absolute inset-x-5 top-[18%] text-center sm:inset-x-8 lg:top-[16%]">
             <p className="mb-5 text-[0.58rem] uppercase tracking-[0.46em] text-gold-300/80">The new olfactory signature</p>
-            <h1 className="mx-auto max-w-5xl text-balance font-display text-[18vw] leading-[0.76] tracking-[-0.055em] text-ivory sm:text-[8rem] lg:text-[10rem]">
+            <h1 className="mx-auto max-w-5xl text-balance font-display text-[17vw] leading-[0.8] tracking-[-0.055em] text-ivory sm:text-[8rem] lg:text-[10rem]">
               Every drop<span className="block italic text-gold-300">defines elegance.</span>
             </h1>
             <div className="pointer-events-auto mt-9"><Button href="/shop" showArrow>Explore collection</Button></div>
@@ -65,7 +65,7 @@ export function CinematicHero() {
           <div ref={finalCopy} className="absolute left-5 top-1/3 max-w-sm opacity-0 sm:left-10 lg:left-20">
             <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">Autoroma</p>
             <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-7xl">Crafted to remain.</h2>
-            <div className="pointer-events-auto mt-8"><Button href="/products/nocturne-oud" variant="outline" showArrow>Discover the scent</Button></div>
+            <div className="pointer-events-auto mt-8"><Button href="/shop" variant="outline" showArrow>Discover the scents</Button></div>
           </div>
         </Container>
 

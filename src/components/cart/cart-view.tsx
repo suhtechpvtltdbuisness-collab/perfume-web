@@ -22,10 +22,10 @@ export function CartView() {
   }
 
   return (
-    <div className="grid gap-14 lg:grid-cols-[1fr_22rem]">
+    <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
       <div className="divide-y divide-white/10 border-y border-white/10">
         {items.map(({ product, quantity }) => (
-          <article key={product.id} className="grid grid-cols-[7rem_1fr] gap-5 py-7 sm:grid-cols-[10rem_1fr_auto] sm:items-center">
+          <article key={product.id} className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-4 py-6 min-[380px]:grid-cols-[7rem_minmax(0,1fr)] min-[380px]:gap-5 sm:grid-cols-[10rem_minmax(0,1fr)_auto] sm:items-center sm:py-7">
             <Link href={`/products/${product.slug}`} className="block border border-white/10">
               <ProductThumbnail product={product} />
             </Link>

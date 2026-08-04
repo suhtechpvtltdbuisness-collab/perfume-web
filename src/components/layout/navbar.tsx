@@ -35,7 +35,7 @@ export function Navbar() {
       )}
     >
       <Container className="flex h-20 items-center justify-between sm:h-24">
-        <nav aria-label="Primary navigation" className="hidden flex-1 lg:block">
+        <nav aria-label="Primary navigation" className="hidden flex-1 xl:block">
           <ul className="flex items-center gap-9">
             {navigationItems.slice(1, 3).map((item) => (
               <li key={item.href}>
@@ -45,9 +45,9 @@ export function Navbar() {
           </ul>
         </nav>
 
-        <Wordmark className="lg:absolute lg:left-1/2 lg:-translate-x-1/2" />
+        <Wordmark className="xl:absolute xl:left-1/2 xl:-translate-x-1/2" />
 
-        <nav aria-label="Secondary navigation" className="hidden flex-1 lg:block">
+        <nav aria-label="Secondary navigation" className="hidden flex-1 xl:block">
           <ul className="flex items-center justify-end gap-7">
             {navigationItems.slice(3).map((item) => (
               <li key={item.href}>
@@ -86,11 +86,11 @@ export function Navbar() {
       <div
         id="mobile-navigation"
         className={cn(
-          "fixed inset-x-0 top-20 h-[calc(100dvh-5rem)] overflow-hidden bg-ink/95 backdrop-blur-2xl transition-[opacity,visibility] duration-500 sm:top-24 sm:h-[calc(100dvh-6rem)] lg:hidden",
+          "fixed inset-x-0 top-20 h-[calc(100dvh-5rem)] overflow-y-auto bg-ink/95 backdrop-blur-2xl transition-[opacity,visibility] duration-500 sm:top-24 sm:h-[calc(100dvh-6rem)] xl:hidden",
           isOpen ? "visible opacity-100" : "invisible opacity-0",
         )}
       >
-        <Container className="flex h-full flex-col justify-center pb-20">
+        <Container className="flex min-h-full flex-col justify-center py-10 sm:py-14">
           <nav aria-label="Mobile navigation">
             <ul className="space-y-3">
               {navigationItems.map((item, index) => (

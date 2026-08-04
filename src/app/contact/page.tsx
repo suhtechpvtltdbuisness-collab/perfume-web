@@ -7,11 +7,11 @@ export const metadata: Metadata = { title: "Contact & Appointments" };
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-ink pb-32 pt-40">
+    <div className="min-h-screen bg-ink pb-24 pt-32 sm:pb-32 sm:pt-40">
       <Container className="grid gap-16 lg:grid-cols-2 lg:gap-28">
         <div>
           <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">Client services</p>
-          <h1 className="mt-5 font-display text-7xl leading-[0.88] tracking-[-0.05em] sm:text-9xl">
+          <h1 className="mt-5 text-balance font-display text-6xl leading-[0.9] tracking-[-0.05em] sm:text-8xl xl:text-9xl">
             Speak with the maison.
           </h1>
           <p className="mt-8 max-w-md text-sm leading-7 text-mist/60">

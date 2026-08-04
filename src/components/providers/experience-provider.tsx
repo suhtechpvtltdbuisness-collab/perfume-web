@@ -1,14 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Image from "next/image";
 import Lenis from "lenis";
-import gsap from "gsap";
 
 import { cn } from "@/lib/utils";
 export function ExperienceProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
-  const cursor = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -23,18 +21,9 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     };
     frame = window.requestAnimationFrame(raf);
 
-    const moveX = cursor.current ? gsap.quickTo(cursor.current, "x", { duration: 0.35, ease: "power3" }) : null;
-    const moveY = cursor.current ? gsap.quickTo(cursor.current, "y", { duration: 0.35, ease: "power3" }) : null;
-    const onMove = (event: PointerEvent) => {
-      moveX?.(event.clientX);
-      moveY?.(event.clientY);
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-
     return () => {
       window.clearTimeout(timer);
       window.cancelAnimationFrame(frame);
-      window.removeEventListener("pointermove", onMove);
       lenis.destroy();
     };
   }, []);
@@ -64,11 +53,6 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
           </div>
         </div>
       </div>
-      <div
-        ref={cursor}
-        aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[120] hidden size-7 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold-300/50 bg-gold-300/5 mix-blend-screen md:block"
-      />
       {children}
     </>
   );

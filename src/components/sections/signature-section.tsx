@@ -16,7 +16,7 @@ export function SignatureSection() {
   const { landing } = useSiteContent();
   return (
     <section className="relative bg-obsidian py-28 sm:py-36 lg:py-48">
-      <div className="absolute inset-x-0 top-0 border-y border-gold-300/10 bg-gold-300/[0.035] py-3 text-center text-[0.48rem] uppercase tracking-[0.38em] text-gold-300/70">
+      <div className="absolute inset-x-0 top-0 border-y border-gold-300/10 bg-gold-300/[0.035] px-5 py-3 text-center text-[0.44rem] uppercase leading-5 tracking-[0.26em] text-gold-300/70 sm:text-[0.48rem] sm:tracking-[0.38em]">
         {landing.announcement}
       </div>
       <Container className="grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
@@ -34,10 +34,10 @@ export function SignatureSection() {
             title={landing.signatureTitle}
             description={landing.signatureDescription}
           />
-          <div className="mt-12 grid grid-cols-3 gap-3 border-t border-white/10 pt-8">
+          <div className="mt-12 grid grid-cols-3 gap-2 border-t border-white/10 pt-8 sm:gap-3">
             {details.map(([value, label]) => (
               <div key={label}>
-                <p className="font-display text-3xl text-gold-300 sm:text-5xl">{value}</p>
+                <p className="font-display text-2xl text-gold-300 min-[380px]:text-3xl sm:text-5xl">{value}</p>
                 <p className="mt-2 text-[0.48rem] uppercase leading-4 tracking-editorial text-mist/45">
                   {label}
                 </p>

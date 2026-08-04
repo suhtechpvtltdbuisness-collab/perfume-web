@@ -5,7 +5,7 @@ import { Wordmark } from "@/components/ui/wordmark";
 
 const footerLinks = [
   ["Explore", [["Collection", "/shop"], ["Our Story", "/story"], ["Contact", "/contact"]]],
-  ["Client care", [["Shipping & returns", "/contact"], ["FAQ", "/contact"], ["Account", "/login"]]],
+  ["Client care", [["Shipping & returns", "/contact"], ["FAQ", "/faq"]]],
 ] as const;
 
 export function Footer() {

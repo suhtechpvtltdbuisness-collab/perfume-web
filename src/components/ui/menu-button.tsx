@@ -13,7 +13,7 @@ export function MenuButton({ isOpen, onClick }: MenuButtonProps) {
       aria-expanded={isOpen}
       aria-controls="mobile-navigation"
       aria-label={isOpen ? "Close navigation" : "Open navigation"}
-      className="group relative flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] outline-none transition-colors duration-500 hover:border-gold-400/40 focus-visible:ring-1 focus-visible:ring-gold-400 lg:hidden"
+      className="group relative flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] outline-none transition-colors duration-500 hover:border-gold-400/40 focus-visible:ring-1 focus-visible:ring-gold-400 xl:hidden"
     >
       <span className="sr-only">{isOpen ? "Close menu" : "Open menu"}</span>
       <span

@@ -26,7 +26,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const classes = cn(
-    "group inline-flex min-h-12 items-center justify-center gap-3 border px-7 text-[0.62rem] font-semibold uppercase tracking-luxury outline-none transition-all duration-500 ease-luxury hover:-translate-y-0.5 focus-visible:ring-1 focus-visible:ring-gold-300 disabled:pointer-events-none disabled:opacity-50",
+    "group inline-flex min-h-12 items-center justify-center gap-3 border px-5 text-center text-[0.58rem] font-semibold uppercase tracking-luxury outline-none transition-all duration-500 ease-luxury hover:-translate-y-0.5 focus-visible:ring-1 focus-visible:ring-gold-300 disabled:pointer-events-none disabled:opacity-50 sm:px-7 sm:text-[0.62rem]",
     styles[variant],
     className,
   );

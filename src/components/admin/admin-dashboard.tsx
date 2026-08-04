@@ -69,14 +69,14 @@ export function AdminDashboard() {
   return (
     <div className="min-h-screen bg-[#080808] pt-24">
       <div className="grid min-h-[calc(100vh-6rem)] lg:grid-cols-[16rem_1fr]">
-        <aside className="border-r border-white/10 p-6">
+        <aside className="border-b border-white/10 p-5 sm:p-6 lg:border-b-0 lg:border-r">
           <p className="text-[0.5rem] uppercase tracking-luxury text-gold-300">Autoroma control</p>
-          <nav className="mt-10 space-y-2" aria-label="Admin sections">
+          <nav className="mt-6 flex gap-2 overflow-x-auto pb-1 lg:mt-10 lg:block lg:space-y-2" aria-label="Admin sections">
             <AdminNav active={view === "overview"} onClick={() => setView("overview")} icon={<LayoutDashboard className="size-4" />}>Overview</AdminNav>
             <AdminNav active={view === "landing"} onClick={() => setView("landing")} icon={<Pencil className="size-4" />}>Landing page</AdminNav>
             <AdminNav active={view === "products"} onClick={() => setView("products")} icon={<Package className="size-4" />}>Products</AdminNav>
           </nav>
-          <button onClick={() => void logout()} className="mt-12 flex items-center gap-3 text-[0.55rem] uppercase tracking-editorial text-mist/45 hover:text-ivory">
+          <button onClick={() => void logout()} className="mt-6 flex items-center gap-3 text-[0.55rem] uppercase tracking-editorial text-mist/45 hover:text-ivory lg:mt-12">
             <LogOut className="size-4" /> Sign out
           </button>
         </aside>
@@ -292,5 +292,5 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 function AdminNav({ active, onClick, icon, children }: { active: boolean; onClick: () => void; icon: React.ReactNode; children: React.ReactNode }) {
-  return <button onClick={onClick} className={cn("flex w-full items-center gap-3 px-4 py-3 text-left text-xs transition", active ? "bg-gold-300 text-ink" : "text-mist/55 hover:bg-white/[0.04] hover:text-ivory")}>{icon}{children}</button>;
+  return <button onClick={onClick} className={cn("flex shrink-0 items-center gap-3 whitespace-nowrap px-4 py-3 text-left text-xs transition lg:w-full", active ? "bg-gold-300 text-ink" : "text-mist/55 hover:bg-white/[0.04] hover:text-ivory")}>{icon}{children}</button>;
 }
