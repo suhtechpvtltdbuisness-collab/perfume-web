@@ -50,7 +50,7 @@ export function AccountMenu({
         href="/login"
         aria-label="Account"
         onClick={onNavigate}
-        className={cn("block p-2 text-ivory/70 transition hover:text-gold-300", className)}
+        className={cn("block p-2 text-ivory/95 transition hover:text-gold-300", className)}
       >
         <UserRound className="size-4" />
       </Link>
@@ -71,13 +71,13 @@ export function AccountMenu({
         aria-label="Account menu"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="block p-2 text-ivory/70 transition hover:text-gold-300"
+        className="block p-2 text-ivory/95 transition hover:text-gold-300"
       >
         <UserRound className="size-4" />
       </button>
       {open && (
         <div className="absolute right-0 top-full z-50 mt-2 min-w-[12rem] border border-white/10 bg-obsidian/95 p-2 shadow-2xl backdrop-blur-xl">
-          <p className="truncate px-3 py-2 text-[0.55rem] uppercase tracking-editorial text-mist/45">
+          <p className="truncate px-3 py-2 text-[0.65rem] uppercase tracking-editorial text-mist/70">
             {user.name || user.email}
           </p>
           {isAuthenticated && user.role === "admin" && (
@@ -87,7 +87,7 @@ export function AccountMenu({
                 setOpen(false);
                 onNavigate?.();
               }}
-              className="block px-3 py-2.5 text-[0.58rem] uppercase tracking-luxury text-ivory/70 transition hover:bg-white/[0.04] hover:text-gold-300"
+              className="block px-3 py-2.5 text-[0.68rem] uppercase tracking-luxury text-ivory/90 transition hover:bg-white/[0.04] hover:text-gold-300"
             >
               Admin dashboard
             </Link>
@@ -95,7 +95,7 @@ export function AccountMenu({
           <button
             type="button"
             onClick={() => void signOut()}
-            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[0.58rem] uppercase tracking-luxury text-ivory/70 transition hover:bg-white/[0.04] hover:text-gold-300"
+            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[0.68rem] uppercase tracking-luxury text-ivory/90 transition hover:bg-white/[0.04] hover:text-gold-300"
           >
             <LogOut className="size-3.5" />
             Log out

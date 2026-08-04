@@ -10,21 +10,21 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#050505]">
+    <footer className="border-t border-white/15 bg-[#070707]">
       <Container className="grid gap-16 py-20 lg:grid-cols-[1.5fr_1fr_1fr] lg:py-28">
         <div>
           <Wordmark size="large" />
-          <p className="mt-7 max-w-sm text-sm leading-7 text-mist/55">
+          <p className="mt-7 max-w-sm text-base font-medium leading-8 text-ivory/85">
             Rare materials, exacting craft and fragrances designed to live close to the skin.
           </p>
         </div>
         {footerLinks.map(([title, links]) => (
           <div key={title}>
-            <p className="text-[0.58rem] uppercase tracking-luxury text-gold-400">{title}</p>
-            <ul className="mt-6 space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-luxury text-gold-300">{title}</p>
+            <ul className="mt-7 space-y-5">
               {links.map(([label, href]) => (
                 <li key={label}>
-                  <Link href={href} className="text-sm text-mist/65 transition hover:text-ivory">
+                  <Link href={href} className="text-base font-medium text-ivory/85 transition hover:text-gold-300">
                     {label}
                   </Link>
                 </li>
@@ -33,7 +33,7 @@ export function Footer() {
           </div>
         ))}
       </Container>
-      <Container className="flex flex-col gap-4 border-t border-white/[0.06] py-7 text-[0.52rem] uppercase tracking-luxury text-mist/35 sm:flex-row sm:justify-between">
+      <Container className="flex flex-col gap-4 border-t border-white/15 py-7 text-xs font-medium uppercase tracking-luxury text-ivory/75 sm:flex-row sm:justify-between">
         <p>© 2026 Autoroma</p>
         <p>Privacy · Terms · India</p>
       </Container>

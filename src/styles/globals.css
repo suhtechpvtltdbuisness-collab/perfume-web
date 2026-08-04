@@ -19,6 +19,11 @@
     @apply min-h-screen overflow-x-hidden selection:bg-gold-400/30 selection:text-ivory;
   }
 
+  h1,
+  h2 {
+    font-weight: 500;
+  }
+
   button,
   a {
     -webkit-tap-highlight-color: transparent;

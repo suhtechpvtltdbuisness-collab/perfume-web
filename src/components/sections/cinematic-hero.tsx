@@ -49,7 +49,7 @@ export function CinematicHero() {
 
         <Container className="pointer-events-none relative z-10 h-full">
           <div ref={intro} className="absolute inset-x-5 top-[18%] text-center sm:inset-x-8 lg:top-[16%]">
-            <p className="mb-5 text-[0.58rem] uppercase tracking-[0.46em] text-gold-300/80">The new olfactory signature</p>
+            <p className="mb-5 text-[0.68rem] uppercase tracking-[0.46em] text-gold-300/95">The new olfactory signature</p>
             <h1 className="mx-auto max-w-5xl text-balance font-display text-[17vw] leading-[0.8] tracking-[-0.055em] text-ivory sm:text-[8rem] lg:text-[10rem]">
               Every drop<span className="block italic text-gold-300">defines elegance.</span>
             </h1>
@@ -57,21 +57,21 @@ export function CinematicHero() {
           </div>
 
           <div ref={sprayCopy} className="absolute right-5 top-[18%] max-w-xs opacity-0 sm:right-10 lg:right-20 lg:top-1/3">
-            <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">The awakening</p>
+            <p className="text-[0.68rem] uppercase tracking-luxury text-gold-300">The awakening</p>
             <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-6xl">A thousand luminous molecules.</h2>
-            <p className="mt-5 text-xs leading-6 text-mist/65">Scroll slowly. The cap lifts, the atomizer presses, and scent becomes light.</p>
+            <p className="mt-5 text-sm leading-6 text-mist/80">Scroll slowly. The cap lifts, the atomizer presses, and scent becomes light.</p>
           </div>
 
           <div ref={finalCopy} className="absolute left-5 top-1/3 max-w-sm opacity-0 sm:left-10 lg:left-20">
-            <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">Autoroma</p>
+            <p className="text-[0.68rem] uppercase tracking-luxury text-gold-300">Autoroma</p>
             <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-7xl">Crafted to remain.</h2>
             <div className="pointer-events-auto mt-8"><Button href="/shop" variant="outline" showArrow>Discover the scents</Button></div>
           </div>
         </Container>
 
-        <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center text-mist/45">
+        <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center text-mist/70">
           <ChevronDown className="mx-auto size-4 animate-bounce" />
-          <span className="mt-2 block text-[0.46rem] uppercase tracking-luxury">Scroll to unveil</span>
+          <span className="mt-2 block text-[0.62rem] uppercase tracking-luxury">Scroll to unveil</span>
         </div>
       </div>
     </section>

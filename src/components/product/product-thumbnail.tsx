@@ -42,6 +42,7 @@ export function ProductThumbnail({
           </span>
         </>
       )}
+      <div className={cn("pointer-events-none absolute inset-x-0 bottom-0 h-2/5 opacity-20 blur-xl mix-blend-screen", product.accent)} />
     </div>
   );
 }

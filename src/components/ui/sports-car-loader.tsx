@@ -6,7 +6,7 @@ export function SportsCarLoader() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(197,151,73,0.08),transparent_48%)]" />
       <div className="relative z-10 -translate-y-12 text-center">
         <p className="font-display text-4xl tracking-[0.22em] text-ivory sm:text-6xl">AUTOROMA</p>
-        <p className="mt-3 text-[0.45rem] uppercase tracking-[0.55em] text-gold-300/55">Performance in every note</p>
+        <p className="mt-3 text-[0.62rem] uppercase tracking-[0.55em] text-gold-300/80">Performance in every note</p>
       </div>
 
       <div className="absolute inset-x-0 bottom-[29%] h-28 sm:bottom-[25%]">
@@ -43,7 +43,7 @@ export function SportsCarLoader() {
         <div className="h-px overflow-hidden bg-white/10">
           <div className="h-full origin-left animate-line-in bg-gradient-to-r from-gold-500 via-gold-300 to-ivory" />
         </div>
-        <div className="mt-4 flex justify-between text-[0.42rem] uppercase tracking-[0.45em] text-mist/35">
+        <div className="mt-4 flex justify-between text-[0.6rem] uppercase tracking-[0.45em] text-mist/75">
           <span>Ignition</span>
           <span>Loading experience</span>
         </div>

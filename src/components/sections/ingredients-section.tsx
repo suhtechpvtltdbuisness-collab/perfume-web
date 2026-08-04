@@ -24,11 +24,11 @@ export function IngredientsSection() {
           {ingredients.map(([number, name, description], index) => (
             <Reveal key={name} delay={(index % 2) * 0.08}>
               <article className="group min-h-72 bg-obsidian p-8 transition-colors duration-700 hover:bg-white/[0.035] sm:p-12">
-                <span className="text-[0.5rem] tracking-luxury text-gold-400">{number}</span>
+                <span className="text-[0.6rem] tracking-luxury text-gold-400">{number}</span>
                 <h3 className="mt-16 font-display text-4xl text-ivory transition-transform duration-700 group-hover:translate-x-2 sm:text-5xl">
                   {name}
                 </h3>
-                <p className="mt-5 max-w-sm text-xs leading-6 text-mist/55">{description}</p>
+                <p className="mt-5 max-w-sm text-sm leading-6 text-mist/75">{description}</p>
               </article>
             </Reveal>
           ))}

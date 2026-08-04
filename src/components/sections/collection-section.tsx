@@ -21,9 +21,9 @@ export function CollectionSection() {
         </Reveal>
 
         {productsLoading ? (
-          <p className="mt-16 text-sm text-mist/50">Loading fragrances…</p>
+          <p className="mt-16 text-sm text-mist/75">Loading fragrances…</p>
         ) : products.length === 0 ? (
-          <p className="mt-16 max-w-md text-sm leading-7 text-mist/55">
+          <p className="mt-16 max-w-md text-base leading-7 text-mist/75">
             The catalogue is empty. Publish fragrances from the admin dashboard to feature them here.
           </p>
         ) : (

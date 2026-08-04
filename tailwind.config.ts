@@ -12,7 +12,7 @@ const config: Config = {
         ink: "#000000",
         obsidian: "#0f0f0f",
         ivory: "#f4f1ea",
-        mist: "#b8b5ad",
+        mist: "#d2cfc8",
         gold: {
           300: "#e8d5a4",
           400: "#c8a96b",

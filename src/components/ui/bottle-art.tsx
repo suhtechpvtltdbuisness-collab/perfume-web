@@ -18,7 +18,7 @@ export function BottleArt({ accent, name, className }: BottleArtProps) {
           <span className="block font-display text-sm tracking-editorial text-ivory sm:text-lg">
             {name}
           </span>
-          <span className="mt-1 block text-[0.34rem] uppercase tracking-[0.38em] text-gold-300/70">
+          <span className="mt-1 block text-[0.58rem] uppercase tracking-[0.38em] text-gold-300/90">
             Autoroma
           </span>
         </div>

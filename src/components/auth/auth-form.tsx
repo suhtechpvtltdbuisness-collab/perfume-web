@@ -68,7 +68,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           <button
             type="button"
             onClick={forgotPassword}
-            className="text-[0.55rem] uppercase tracking-editorial text-gold-300 hover:text-ivory"
+            className="text-[0.65rem] uppercase tracking-editorial text-gold-300 hover:text-ivory"
           >
             Forgot password?
           </button>
@@ -85,7 +85,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
             ? "Sign in"
             : "Create account"}
       </Button>
-      <p className="pt-3 text-center text-xs text-mist/50">
+      <p className="pt-3 text-center text-xs text-mist/75">
         {mode === "login" ? "New to Autoroma?" : "Already have an account?"}{" "}
         <Link href={mode === "login" ? "/register" : "/login"} className="text-gold-300 hover:text-ivory">
           {mode === "login" ? "Create an account" : "Sign in"}
@@ -98,7 +98,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
 function Field({ id, label, type }: { id: string; label: string; type: string }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-[0.52rem] uppercase tracking-luxury text-mist/55">{label}</label>
+      <label htmlFor={id} className="mb-2 block text-[0.62rem] uppercase tracking-luxury text-mist/75">{label}</label>
       <input id={id} name={id} type={type} required className="h-14 w-full border border-white/10 bg-white/[0.025] px-4 text-sm text-ivory outline-none transition focus:border-gold-300/60" />
     </div>
   );

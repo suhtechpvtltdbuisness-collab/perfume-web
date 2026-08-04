@@ -35,7 +35,7 @@ export function AddToCartButton({
           type="button"
           onClick={add}
           aria-label={added ? `${product.name} added to bag` : `Add ${product.name} to bag`}
-          className="mt-2 inline-flex min-h-7 items-center gap-1.5 text-[0.52rem] uppercase tracking-luxury text-gold-300/70 transition-colors hover:text-gold-300"
+          className="mt-2 inline-flex min-h-7 items-center gap-1.5 text-[0.62rem] uppercase tracking-luxury text-gold-300/90 transition-colors hover:text-gold-300"
         >
           {added && <Check className="size-3" />}
           {added ? "Added" : "Add to bag"}
@@ -71,7 +71,7 @@ function CartToast({ productName, visible }: { productName: string; visible: boo
         </span>
         <span className="min-w-0">
           <span className="block truncate font-display text-lg text-ivory">{productName}</span>
-          <span className="mt-0.5 block text-[0.5rem] uppercase tracking-luxury text-gold-300/70">Added to your bag</span>
+          <span className="mt-0.5 block text-[0.6rem] uppercase tracking-luxury text-gold-300/90">Added to your bag</span>
         </span>
       </div>
     </div>

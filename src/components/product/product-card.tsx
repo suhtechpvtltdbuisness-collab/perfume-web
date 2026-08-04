@@ -14,7 +14,7 @@ export function ProductCard({ product }: { product: Product }) {
         className="relative block aspect-[4/5] w-full shrink-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0a] transition-colors duration-700 hover:border-gold-400/30"
       >
         <ProductCover product={product} className="h-full w-full" />
-        <span className="absolute left-4 top-4 max-w-[75%] bg-black/30 px-2.5 py-1.5 text-[0.48rem] uppercase tracking-luxury text-mist/75 backdrop-blur-sm sm:left-5 sm:top-5">
+        <span className="absolute left-4 top-4 max-w-[75%] bg-black/30 px-2.5 py-1.5 text-[0.62rem] uppercase tracking-luxury text-mist/75 backdrop-blur-sm sm:left-5 sm:top-5">
           {product.family}
         </span>
         <span className="absolute bottom-5 right-5 flex size-11 items-center justify-center rounded-full border border-white/10 bg-black/40 opacity-0 backdrop-blur transition duration-500 group-hover:opacity-100">
@@ -26,7 +26,7 @@ export function ProductCard({ product }: { product: Product }) {
           <Link href={`/products/${product.slug}`} className="line-clamp-1 font-display text-2xl text-ivory transition-colors hover:text-gold-300 sm:text-3xl">
             {product.name}
           </Link>
-          <p className="mt-2 line-clamp-1 text-[0.52rem] uppercase tracking-[0.18em] text-mist/50">
+          <p className="mt-2 line-clamp-1 text-[0.62rem] uppercase tracking-[0.18em] text-mist/75">
             {product.subtitle} · {product.size}
           </p>
         </div>

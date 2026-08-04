@@ -15,7 +15,7 @@ export function CartView() {
     return (
       <div className="border-y border-white/10 py-24 text-center">
         <p className="font-display text-4xl text-ivory">Your bag is beautifully empty.</p>
-        <p className="mt-4 text-sm text-mist/55">Discover a fragrance made to remain.</p>
+        <p className="mt-4 text-sm text-mist/75">Discover a fragrance made to remain.</p>
         <Button href="/shop" className="mt-8">Explore the collection</Button>
       </div>
     );
@@ -30,15 +30,15 @@ export function CartView() {
               <ProductThumbnail product={product} />
             </Link>
             <div>
-              <p className="text-[0.48rem] uppercase tracking-luxury text-gold-300">{product.family}</p>
+              <p className="text-[0.62rem] uppercase tracking-luxury text-gold-300">{product.family}</p>
               <Link href={`/products/${product.slug}`} className="mt-2 block font-display text-2xl hover:text-gold-300 sm:text-3xl">
                 {product.name}
               </Link>
-              <p className="mt-2 text-[0.52rem] uppercase tracking-luxury text-mist/45">
+              <p className="mt-2 text-[0.62rem] uppercase tracking-luxury text-mist/70">
                 {product.subtitle} · {product.size}
               </p>
               {product.notes?.length > 0 && (
-                <p className="mt-3 line-clamp-1 text-xs text-mist/50">
+                <p className="mt-3 line-clamp-1 text-xs text-mist/75">
                   {product.notes.filter(Boolean).join(" · ")}
                 </p>
               )}
@@ -52,7 +52,7 @@ export function CartView() {
               </div>
               <div className="flex items-center gap-4">
                 <p className="text-sm text-ivory/70">{formatPrice(product.price * quantity)}</p>
-                <button aria-label={`Remove ${product.name}`} onClick={() => removeItem(product.id)} className="p-2 text-mist/45 hover:text-ivory">
+                <button aria-label={`Remove ${product.name}`} onClick={() => removeItem(product.id)} className="p-2 text-mist/70 hover:text-ivory">
                   <Trash2 className="size-4" />
                 </button>
               </div>
@@ -62,13 +62,13 @@ export function CartView() {
       </div>
       <aside className="h-fit border border-white/10 bg-white/[0.025] p-7">
         <h2 className="font-display text-3xl">Order summary</h2>
-        <div className="mt-7 space-y-4 border-y border-white/10 py-6 text-xs text-mist/65">
+        <div className="mt-7 space-y-4 border-y border-white/10 py-6 text-xs text-mist/80">
           <div className="flex justify-between"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></div>
           <div className="flex justify-between"><span>Delivery</span><span>Complimentary</span></div>
         </div>
         <div className="flex justify-between py-6 font-display text-xl"><span>Total</span><span>{formatPrice(subtotal)}</span></div>
         <Button href="/checkout" className="w-full">Proceed to checkout</Button>
-        <p className="mt-5 text-center text-[0.5rem] uppercase tracking-editorial text-mist/35">Secure encrypted checkout</p>
+        <p className="mt-5 text-center text-[0.6rem] uppercase tracking-editorial text-mist/75">Secure encrypted checkout</p>
       </aside>
     </div>
   );

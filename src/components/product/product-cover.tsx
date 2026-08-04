@@ -35,6 +35,7 @@ export function ProductCover({ product, className }: { product: Product; classNa
           </span>
         </>
       )}
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-2/5 opacity-20 blur-2xl mix-blend-screen ${product.accent}`} />
       <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/[0.04]" />
     </div>
   );

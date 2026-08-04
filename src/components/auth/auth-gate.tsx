@@ -16,7 +16,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
   if (!isReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ink text-sm text-mist/50">
+      <div className="flex min-h-screen items-center justify-center bg-ink text-sm text-mist/75">
         Checking session…
       </div>
     );
@@ -24,7 +24,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
   if (isAuthenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ink text-sm text-mist/50">
+      <div className="flex min-h-screen items-center justify-center bg-ink text-sm text-mist/75">
         Redirecting…
       </div>
     );

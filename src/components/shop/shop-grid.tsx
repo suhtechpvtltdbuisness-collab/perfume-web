@@ -33,7 +33,7 @@ export function ShopGrid() {
 
   if (productsLoading) {
     return (
-      <div className="border-y border-white/10 py-24 text-center text-sm text-mist/50">
+      <div className="border-y border-white/10 py-24 text-center text-sm text-mist/75">
         Loading the collection…
       </div>
     );
@@ -43,7 +43,7 @@ export function ShopGrid() {
     return (
       <div className="border-y border-white/10 py-24 text-center">
         <p className="font-display text-4xl text-ivory">The collection is being composed.</p>
-        <p className="mt-4 text-sm text-mist/55">New fragrances will appear here once published from the admin dashboard.</p>
+        <p className="mt-4 text-sm text-mist/75">New fragrances will appear here once published from the admin dashboard.</p>
       </div>
     );
   }
@@ -58,24 +58,24 @@ export function ShopGrid() {
               type="button"
               onClick={() => setActive(filter)}
               className={cn(
-                "border px-5 py-2.5 text-[0.52rem] uppercase tracking-luxury transition",
+                "border px-5 py-2.5 text-[0.62rem] uppercase tracking-luxury transition",
                 active === filter
                   ? "border-gold-300 bg-gold-300 text-ink"
-                  : "border-white/10 text-mist/55 hover:border-white/30 hover:text-ivory",
+                  : "border-white/10 text-mist/75 hover:border-white/30 hover:text-ivory",
               )}
             >
               {filter}
             </button>
           ))}
         </div>
-        <p className="shrink-0 text-[0.52rem] uppercase tracking-luxury text-mist/40">
+        <p className="shrink-0 text-[0.62rem] uppercase tracking-luxury text-mist/75">
           {visible.length} {visible.length === 1 ? "fragrance" : "fragrances"}
         </p>
       </div>
 
       {visible.length === 0 ? (
         <div className="py-20 text-center">
-          <p className="text-sm text-mist/55">No fragrances in this family yet.</p>
+          <p className="text-sm text-mist/75">No fragrances in this family yet.</p>
           <Button type="button" variant="outline" className="mt-6" onClick={() => setActive("All")}>
             View all
           </Button>

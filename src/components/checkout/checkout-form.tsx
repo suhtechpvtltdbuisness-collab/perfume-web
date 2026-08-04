@@ -22,7 +22,7 @@ export function CheckoutForm() {
       <div className="mx-auto max-w-2xl py-16 text-center">
         <CheckCircle2 className="mx-auto size-12 text-gold-300" />
         <h2 className="mt-7 font-display text-6xl">Thank you.</h2>
-        <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-mist/60">
+        <p className="mx-auto mt-5 max-w-md text-base leading-7 text-mist/80">
           Your demo order has been placed. Payment and order APIs can be connected when your commerce backend is ready.
         </p>
         <Button href="/shop" className="mt-9">Return to collection</Button>
@@ -54,7 +54,7 @@ export function CheckoutForm() {
           <Field id="phone" label="Phone" type="tel" wide />
         </CheckoutSection>
         <CheckoutSection title="Payment">
-          <div className="col-span-full flex items-center gap-3 border border-white/10 bg-white/[0.025] p-4 text-xs text-mist/60">
+          <div className="col-span-full flex items-center gap-3 border border-white/10 bg-white/[0.025] p-4 text-xs text-mist/80">
             <LockKeyhole className="size-4 text-gold-300" />
             Secure demo payment form
           </div>
@@ -68,7 +68,7 @@ export function CheckoutForm() {
         <div className="mt-6 divide-y divide-white/10 border-y border-white/10">
           {items.map(({ product, quantity }) => (
             <div key={product.id} className="flex justify-between gap-4 py-4 text-xs">
-              <span className="text-mist/65">{product.name} × {quantity}</span>
+              <span className="text-mist/80">{product.name} × {quantity}</span>
               <span>{formatPrice(product.price * quantity)}</span>
             </div>
           ))}
@@ -92,7 +92,7 @@ function CheckoutSection({ title, children }: { title: string; children: React.R
 function Field({ id, label, type = "text", wide = false }: { id: string; label: string; type?: string; wide?: boolean }) {
   return (
     <div className={wide ? "sm:col-span-2" : ""}>
-      <label htmlFor={id} className="mb-2 block text-[0.5rem] uppercase tracking-luxury text-mist/50">{label}</label>
+      <label htmlFor={id} className="mb-2 block text-[0.6rem] uppercase tracking-luxury text-mist/75">{label}</label>
       <input id={id} name={id} type={type} required className="h-14 w-full border border-white/10 bg-white/[0.025] px-4 text-sm outline-none transition focus:border-gold-300/60" />
     </div>
   );

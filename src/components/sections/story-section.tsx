@@ -26,7 +26,7 @@ export function StorySection() {
             <div className="absolute inset-5 rounded-xl border border-white/15" />
             <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-white sm:inset-x-10 sm:bottom-10">
               <div>
-                <p className="text-[0.5rem] uppercase tracking-[0.4em] text-white/55">Designed for motion</p>
+                <p className="text-[0.6rem] uppercase tracking-[0.4em] text-white/55">Designed for motion</p>
                 <p className="mt-3 max-w-xs font-display text-3xl leading-none sm:text-4xl">A signature for every journey.</p>
               </div>
               <span className="hidden size-12 items-center justify-center rounded-full border border-white/25 font-display text-xl italic sm:flex">A</span>
@@ -40,19 +40,19 @@ export function StorySection() {
             <div>
               <div className="flex items-center gap-4">
                 <span className="h-px w-10 bg-[#c81424]" />
-                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.4em] text-black/50">On the road · Since 1927</p>
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.4em] text-black/70">On the road · Since 1927</p>
               </div>
               <blockquote className="mt-8 text-balance font-display text-5xl leading-[0.94] tracking-[-0.04em] sm:text-6xl xl:text-7xl">
                 “{landing.storyQuote}”
               </blockquote>
-              <p className="mt-8 max-w-lg text-sm leading-7 text-black/60">
+              <p className="mt-8 max-w-lg text-base leading-7 text-black/75">
                 {landing.storyDescription}
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-6">
                 <Button href="/story" variant="outline" showArrow className="border-black/20 text-ink hover:border-black hover:text-ink">
                   Read our story
                 </Button>
-                <p className="text-[0.48rem] uppercase tracking-[0.28em] text-black/40">Scent · Motion · Memory</p>
+                <p className="text-[0.62rem] uppercase tracking-[0.28em] text-black/65">Scent · Motion · Memory</p>
               </div>
             </div>
           </Reveal>

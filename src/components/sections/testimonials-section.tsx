@@ -12,7 +12,7 @@ export function TestimonialsSection() {
           <blockquote key={`${quote}-${index}`} className="w-[80vw] max-w-xl border border-white/10 bg-white/[0.025] p-8 backdrop-blur sm:p-10">
             <p className="text-gold-300">★★★★★</p>
             <p className="mt-6 font-display text-2xl leading-snug text-ivory sm:text-3xl">“{quote}”</p>
-            <footer className="mt-7 text-[0.5rem] uppercase tracking-luxury text-mist/45">Verified client</footer>
+            <footer className="mt-7 text-[0.6rem] uppercase tracking-luxury text-mist/70">Verified client</footer>
           </blockquote>
         ))}
       </div>

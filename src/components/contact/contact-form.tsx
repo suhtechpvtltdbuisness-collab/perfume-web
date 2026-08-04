@@ -15,7 +15,7 @@ export function ContactForm() {
     return (
       <div className="border border-gold-300/30 p-8">
         <p className="font-display text-3xl text-gold-300">Your note has been received.</p>
-        <p className="mt-3 text-sm text-mist/60">Our client team will respond within one working day.</p>
+        <p className="mt-3 text-sm text-mist/80">Our client team will respond within one working day.</p>
       </div>
     );
   }
@@ -25,7 +25,7 @@ export function ContactForm() {
       <Field id="contact-name" label="Name" />
       <Field id="contact-email" label="Email" type="email" />
       <div>
-        <label htmlFor="contact-subject" className="mb-2 block text-[0.52rem] uppercase tracking-luxury text-mist/50">Subject</label>
+        <label htmlFor="contact-subject" className="mb-2 block text-[0.62rem] uppercase tracking-luxury text-mist/75">Subject</label>
         <select id="contact-subject" className="h-14 w-full border border-white/10 bg-obsidian px-4 text-sm outline-none focus:border-gold-300/60">
           <option>Product consultation</option>
           <option>Order assistance</option>
@@ -34,7 +34,7 @@ export function ContactForm() {
         </select>
       </div>
       <div>
-        <label htmlFor="contact-message" className="mb-2 block text-[0.52rem] uppercase tracking-luxury text-mist/50">Message</label>
+        <label htmlFor="contact-message" className="mb-2 block text-[0.62rem] uppercase tracking-luxury text-mist/75">Message</label>
         <textarea id="contact-message" required rows={5} className="w-full resize-none border border-white/10 bg-white/[0.025] p-4 text-sm outline-none focus:border-gold-300/60" />
       </div>
       <Button type="submit">Send enquiry</Button>
@@ -45,7 +45,7 @@ export function ContactForm() {
 function Field({ id, label, type = "text" }: { id: string; label: string; type?: string }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-[0.52rem] uppercase tracking-luxury text-mist/50">{label}</label>
+      <label htmlFor={id} className="mb-2 block text-[0.62rem] uppercase tracking-luxury text-mist/75">{label}</label>
       <input id={id} type={type} required className="h-14 w-full border border-white/10 bg-white/[0.025] px-4 text-sm outline-none focus:border-gold-300/60" />
     </div>
   );

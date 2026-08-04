@@ -41,8 +41,9 @@ export function ProductMediaGallery({ product }: { product: Product }) {
         <AnimatePresence mode="wait">
           {active && <GalleryStage key={active.id} asset={active} productName={product.name} />}
         </AnimatePresence>
+        <div className={cn("pointer-events-none absolute inset-x-0 bottom-0 h-2/5 opacity-15 blur-3xl mix-blend-screen", product.accent)} />
         <div className="pointer-events-none absolute inset-5 rounded-xl border border-white/[0.06]" />
-        <div className="absolute bottom-7 left-7 flex items-center gap-2 text-[0.48rem] uppercase tracking-luxury text-white/50">
+        <div className="absolute bottom-7 left-7 flex items-center gap-2 text-[0.62rem] uppercase tracking-luxury text-white/50">
           <Sparkles className="size-3 text-gold-300" />
           {selected + 1} / {media.length}
         </div>

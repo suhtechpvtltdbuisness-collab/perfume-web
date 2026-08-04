@@ -58,7 +58,7 @@ export function Navbar() {
               <li>
                 <Link
                   href="/admin"
-                  className="border border-gold-300/40 px-4 py-2 text-[0.52rem] font-semibold uppercase tracking-luxury text-gold-300 transition hover:border-gold-300 hover:bg-gold-300 hover:text-ink"
+                  className="border border-gold-300/40 px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-luxury text-gold-300 transition hover:border-gold-300 hover:bg-gold-300 hover:text-ink"
                 >
                   Admin dashboard
                 </Link>
@@ -68,10 +68,10 @@ export function Navbar() {
               <AccountMenu />
             </li>
             <li>
-              <Link href="/cart" aria-label={`Shopping bag with ${itemCount} items`} className="relative block p-2 text-ivory/70 transition hover:text-gold-300">
+              <Link href="/cart" aria-label={`Shopping bag with ${itemCount} items`} className="relative block p-2 text-ivory/95 transition hover:text-gold-300">
                 <ShoppingBag className="size-4" />
                 {itemCount > 0 && (
-                  <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-gold-300 text-[0.48rem] font-bold text-ink">
+                  <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-gold-300 text-[0.62rem] font-bold text-ink">
                     {itemCount}
                   </span>
                 )}
@@ -118,7 +118,7 @@ export function Navbar() {
               ))}
             </ul>
           </nav>
-          <p className="mt-14 text-[0.6rem] uppercase tracking-luxury text-mist/50">
+          <p className="mt-14 text-[0.6rem] uppercase tracking-luxury text-mist/75">
             Paris · Grasse · Since 1927
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -126,7 +126,7 @@ export function Navbar() {
               <Link
                 href="/admin"
                 onClick={closeMenu}
-                className="border border-gold-300/40 px-4 py-2 text-[0.58rem] uppercase tracking-luxury text-gold-300"
+                className="border border-gold-300/40 px-4 py-2 text-[0.68rem] uppercase tracking-luxury text-gold-300"
               >
                 Admin dashboard
               </Link>
@@ -138,16 +138,16 @@ export function Navbar() {
                   closeMenu();
                   void logout();
                 }}
-                className="text-[0.58rem] uppercase tracking-luxury text-gold-300"
+                className="text-[0.68rem] uppercase tracking-luxury text-gold-300"
               >
                 Log out
               </button>
             ) : (
-              <Link href="/login" onClick={closeMenu} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
+              <Link href="/login" onClick={closeMenu} className="text-[0.68rem] uppercase tracking-luxury text-gold-300">
                 Account
               </Link>
             )}
-            <Link href="/cart" onClick={closeMenu} className="text-[0.58rem] uppercase tracking-luxury text-gold-300">
+            <Link href="/cart" onClick={closeMenu} className="text-[0.68rem] uppercase tracking-luxury text-gold-300">
               Bag ({itemCount})
             </Link>
           </div>
@@ -161,7 +161,7 @@ function NavLink({ href, children }: { href: string; children: string }) {
   return (
     <Link
       href={href}
-      className="group relative py-2 text-[0.62rem] font-medium uppercase tracking-luxury text-ivory/70 outline-none transition-colors duration-300 hover:text-ivory focus-visible:text-ivory"
+      className="group relative py-2 text-[0.7rem] font-semibold uppercase tracking-luxury text-ivory/95 outline-none transition-colors duration-300 hover:text-gold-300 focus-visible:text-gold-300"
     >
       {children}
       <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gold-400 transition-transform duration-500 ease-luxury group-hover:scale-x-100 group-focus-visible:scale-x-100" />

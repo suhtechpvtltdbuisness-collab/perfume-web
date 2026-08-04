@@ -44,20 +44,20 @@ export default function FaqPage() {
       <Container className="max-w-[1320px]">
         <div className="grid gap-10 border-b border-white/10 pb-14 lg:grid-cols-[1fr_0.7fr] lg:items-end">
           <div>
-            <p className="text-[0.58rem] uppercase tracking-[0.4em] text-gold-300">Client care</p>
+            <p className="text-[0.68rem] uppercase tracking-[0.4em] text-gold-300">Client care</p>
             <h1 className="mt-5 text-balance font-display text-6xl leading-[0.88] tracking-[-0.05em] sm:text-8xl lg:text-9xl">
               Questions, answered.
             </h1>
           </div>
-          <p className="max-w-md text-sm leading-7 text-mist/60 lg:justify-self-end">
+          <p className="max-w-md text-base leading-7 text-mist/75 lg:justify-self-end">
             Everything you need to know about using, caring for and ordering your Autoroma car fragrance.
           </p>
         </div>
 
         <div className="mt-16 grid gap-16 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-24">
           <aside>
-            <p className="text-[0.52rem] uppercase tracking-luxury text-gold-400">Need more help?</p>
-            <p className="mt-5 text-sm leading-7 text-mist/55">Our team can help with product selection, usage and order support.</p>
+            <p className="text-[0.62rem] uppercase tracking-luxury text-gold-400">Need more help?</p>
+            <p className="mt-5 text-base leading-7 text-mist/85">Our team can help with product selection, usage and order support.</p>
             <Button href="/contact" variant="outline" showArrow className="mt-7">Contact us</Button>
           </aside>
 
@@ -70,12 +70,12 @@ export default function FaqPage() {
                     <details key={question} className="group border-t border-white/10">
                       <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-sm text-ivory outline-none transition-colors hover:text-gold-300 focus-visible:text-gold-300 sm:text-base">
                         <span className="flex items-start gap-4">
-                          <span className="mt-0.5 text-[0.5rem] tracking-luxury text-gold-400">{String(index + 1).padStart(2, "0")}</span>
+                          <span className="mt-0.5 text-[0.6rem] tracking-luxury text-gold-400">{String(index + 1).padStart(2, "0")}</span>
                           {question}
                         </span>
-                        <ChevronDown className="size-4 shrink-0 text-mist/45 transition-transform duration-300 group-open:rotate-180" />
+                        <ChevronDown className="size-4 shrink-0 text-mist/70 transition-transform duration-300 group-open:rotate-180" />
                       </summary>
-                      <p className="max-w-2xl pb-7 pl-10 pr-8 text-sm leading-7 text-mist/60">{answer}</p>
+                      <p className="max-w-2xl pb-7 pl-10 pr-8 text-base leading-7 text-mist/75">{answer}</p>
                     </details>
                   ))}
                 </div>
