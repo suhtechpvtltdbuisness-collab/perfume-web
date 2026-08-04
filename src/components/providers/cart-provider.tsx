@@ -31,6 +31,19 @@ interface CartContextValue {
 const CartContext = createContext<CartContextValue | null>(null);
 const storageKey = "autoroma-cart";
 
+function isCartItem(value: unknown): value is CartItem {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Partial<CartItem>;
+  return (
+    Boolean(item.product) &&
+    typeof item.product?.id === "string" &&
+    item.product.id.length > 0 &&
+    typeof item.quantity === "number" &&
+    Number.isFinite(item.quantity) &&
+    item.quantity > 0
+  );
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const { products, productsLoading } = useSiteContent();
   const [items, setItems] = useState<CartItem[]>([]);
@@ -40,7 +53,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const hydrate = window.setTimeout(() => {
       try {
         const stored = window.localStorage.getItem(storageKey);
-        if (stored) setItems(JSON.parse(stored) as CartItem[]);
+        if (stored) {
+          const parsed = JSON.parse(stored) as unknown;
+          if (!Array.isArray(parsed)) throw new Error("Invalid cart data");
+          const validItems = parsed.filter(isCartItem);
+          setItems(validItems);
+          if (validItems.length !== parsed.length) {
+            window.localStorage.setItem(storageKey, JSON.stringify(validItems));
+          }
+        }
       } catch {
         window.localStorage.removeItem(storageKey);
       } finally {
@@ -79,10 +100,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [isReady, products, productsLoading]);
 
   useEffect(() => {
-    if (isReady) window.localStorage.setItem(storageKey, JSON.stringify(items));
+    if (!isReady) return;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(items));
+    } catch {
+      // Cart state remains usable even when browser storage is unavailable.
+    }
   }, [isReady, items]);
 
   const addItem = useCallback((product: Product) => {
+    if (!product.id) return;
     setItems((current) => {
       const existing = current.find((item) => item.product.id === product.id);
       return existing
