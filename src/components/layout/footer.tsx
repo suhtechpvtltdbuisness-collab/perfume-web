@@ -13,7 +13,7 @@ export function Footer() {
     <footer className="border-t border-white/[0.08] bg-[#050505]">
       <Container className="grid gap-16 py-20 lg:grid-cols-[1.5fr_1fr_1fr] lg:py-28">
         <div>
-          <Wordmark className="w-fit items-start" />
+          <Wordmark size="large" />
           <p className="mt-7 max-w-sm text-sm leading-7 text-mist/55">
             Rare materials, exacting craft and fragrances designed to live close to the skin.
           </p>

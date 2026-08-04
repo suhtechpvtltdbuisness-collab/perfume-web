@@ -24,7 +24,7 @@ export function ProductThumbnail({
   }
 
   return (
-    <div className={cn("relative aspect-[4/5] overflow-hidden bg-[#080808]", className)}>
+    <div className={cn("relative aspect-[4/5] overflow-hidden rounded-xl bg-[#080808]", className)}>
       {cover.type === "image" ? (
         <Image
           src={url}

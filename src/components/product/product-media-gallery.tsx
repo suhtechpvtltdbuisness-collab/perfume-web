@@ -17,16 +17,16 @@ export function ProductMediaGallery({ product }: { product: Product }) {
 
   if (media.length === 0) {
     return (
-      <div className="relative border border-white/[0.08] bg-[#090909]">
-        <BottleArt accent={product.accent} name={product.name} className="max-h-[76vh]" />
-        <div className="pointer-events-none absolute inset-6 border border-gold-300/[0.06]" />
+      <div className="relative mx-auto aspect-square w-full max-w-[42rem] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#090909] lg:mx-0 lg:h-[min(66vh,42rem)] lg:aspect-auto">
+        <BottleArt accent={product.accent} name={product.name} className="h-full w-full" />
+        <div className="pointer-events-none absolute inset-6 rounded-xl border border-gold-300/[0.06]" />
       </div>
     );
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-[5.5rem_1fr]">
-      <div className="order-2 flex gap-3 overflow-x-auto sm:order-1 sm:flex-col">
+    <div className="mx-auto grid w-full max-w-[48rem] gap-3 lg:mx-0 lg:grid-cols-[4.75rem_minmax(0,1fr)]">
+      <div className="order-2 flex gap-3 overflow-x-auto pb-1 lg:order-1 lg:max-h-[min(66vh,42rem)] lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:pb-0 lg:pr-1">
         {media.map((asset, index) => (
           <GalleryThumbnail
             key={asset.id}
@@ -36,12 +36,12 @@ export function ProductMediaGallery({ product }: { product: Product }) {
           />
         ))}
       </div>
-      <div className="order-1 relative aspect-[4/5] overflow-hidden border border-white/10 bg-[#070707] sm:order-2">
+      <div className="relative order-1 aspect-square overflow-hidden rounded-2xl border border-white/10 bg-[#070707] lg:order-2 lg:h-[min(66vh,42rem)] lg:aspect-auto">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(199,163,93,0.12),transparent_55%)]" />
         <AnimatePresence mode="wait">
           {active && <GalleryStage key={active.id} asset={active} productName={product.name} />}
         </AnimatePresence>
-        <div className="pointer-events-none absolute inset-5 border border-white/[0.06]" />
+        <div className="pointer-events-none absolute inset-5 rounded-xl border border-white/[0.06]" />
         <div className="absolute bottom-7 left-7 flex items-center gap-2 text-[0.48rem] uppercase tracking-luxury text-white/50">
           <Sparkles className="size-3 text-gold-300" />
           {selected + 1} / {media.length}
@@ -63,10 +63,18 @@ function GalleryStage({ asset, productName }: { asset: ProductMedia; productName
       className="absolute inset-0"
     >
       {url && asset.type === "image" && (
-        <Image src={url} alt={`${productName} — ${asset.name}`} fill unoptimized priority className="object-cover" />
+        <Image
+          src={url}
+          alt={`${productName} — ${asset.name}`}
+          fill
+          unoptimized
+          priority
+          sizes="(min-width: 1024px) 46vw, 100vw"
+          className="object-contain"
+        />
       )}
       {url && asset.type === "video" && (
-        <video src={url} controls playsInline autoPlay muted loop className="size-full object-cover" />
+        <video src={url} controls playsInline autoPlay muted loop className="size-full object-contain" />
       )}
       {!url && <div className="size-full animate-pulse bg-white/[0.03]" />}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/[0.035]" />
@@ -83,7 +91,7 @@ function GalleryThumbnail({ asset, active, onClick }: { asset: ProductMedia; act
       onClick={onClick}
       aria-label={`View ${asset.name}`}
       className={cn(
-        "relative aspect-square w-20 shrink-0 overflow-hidden border bg-[#090909] transition sm:w-full",
+        "relative aspect-square w-20 shrink-0 overflow-hidden rounded-lg border bg-[#090909] transition lg:w-full",
         active ? "border-gold-300" : "border-white/10 opacity-55 hover:opacity-100",
       )}
     >

@@ -17,18 +17,19 @@ export function ProductCover({ product, className }: { product: Product; classNa
   }
 
   return (
-    <div className={`relative aspect-[4/5] overflow-hidden bg-[#080808] ${className ?? ""}`}>
+    <div className={`relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#080808] ${className ?? ""}`}>
       {cover.type === "image" ? (
         <Image
           src={url}
           alt={product.name}
           fill
           unoptimized
-          className="object-cover transition-transform duration-1000 ease-luxury group-hover:scale-105"
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover object-center transition-transform duration-1000 ease-luxury group-hover:scale-105"
         />
       ) : (
         <>
-          <video src={url} muted playsInline className="size-full object-cover" />
+          <video src={url} muted playsInline preload="metadata" className="size-full object-cover object-center" />
           <span className="absolute left-1/2 top-1/2 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/30 backdrop-blur">
             <Play className="size-4 fill-white" />
           </span>

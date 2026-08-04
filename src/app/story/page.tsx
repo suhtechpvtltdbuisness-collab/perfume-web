@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -15,20 +16,70 @@ const timeline = [
 export default function StoryPage() {
   return (
     <div className="bg-ink">
-      <section className="flex min-h-screen items-end border-b border-white/10 pb-24 pt-40">
-        <Container>
-          <p className="text-[0.58rem] uppercase tracking-[0.44em] text-gold-300">The House</p>
-          <h1 className="mt-6 max-w-6xl text-balance font-display text-[16vw] leading-[0.75] tracking-[-0.06em] sm:text-[9rem] lg:text-[11rem]">
-            A century in pursuit of the invisible.
-          </h1>
+      <section className="border-b border-white/10 pb-16 pt-32 sm:pb-20 sm:pt-36 lg:pb-24">
+        <Container className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 xl:gap-24">
+          <div className="py-4 lg:py-10">
+            <p className="text-[0.58rem] uppercase tracking-[0.44em] text-gold-300">The House</p>
+            <h1 className="mt-6 max-w-4xl text-balance font-display text-6xl leading-[0.84] tracking-[-0.055em] sm:text-8xl lg:text-[7rem] xl:text-[8.5rem]">
+              A century in pursuit of the invisible.
+            </h1>
+            <p className="mt-8 max-w-md text-sm leading-7 text-mist/60">
+              Fragrance created for the road—turning every drive into a place worth remembering.
+            </p>
+          </div>
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-white/10 bg-obsidian shadow-[0_30px_100px_rgba(0,0,0,0.55)] lg:max-h-[42rem]">
+            <Image
+              src="/images/autoroma-car-fragrance-story.png"
+              alt="Amber car fragrance hanging inside a premium vehicle"
+              fill
+              priority
+              sizes="(min-width: 1024px) 42vw, 100vw"
+              className="object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/[0.03]" />
+            <div className="pointer-events-none absolute inset-5 rounded-xl border border-gold-300/10" />
+          </div>
         </Container>
       </section>
-      <section className="bg-[#ded8ca] py-28 text-ink sm:py-40">
-        <Container className="grid gap-14 lg:grid-cols-2">
-          <p className="text-[0.58rem] uppercase tracking-luxury text-black/45">Our philosophy</p>
-          <p className="font-display text-4xl leading-tight sm:text-6xl">
-            We do not begin with trends. We begin with a material worth remembering.
-          </p>
+      <section className="relative overflow-hidden bg-[#ded8ca] py-24 text-ink sm:py-32">
+        <div className="pointer-events-none absolute -bottom-52 -left-40 size-[32rem] rounded-full border border-black/[0.06] sm:size-[42rem]" />
+        <div className="pointer-events-none absolute -bottom-28 -left-12 size-[20rem] rounded-full border border-black/[0.06] sm:size-[28rem]" />
+        <Container className="relative grid items-center gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
+          <div>
+            <p className="text-[0.58rem] uppercase tracking-luxury text-black/45">Our philosophy</p>
+            <div className="mt-10 max-w-sm border-l border-black/15 pl-6 sm:mt-14 sm:pl-8">
+              <div className="flex items-center gap-4">
+                <span className="flex size-12 items-center justify-center rounded-full border border-black/15 font-display text-xl italic">A</span>
+                <span className="h-px flex-1 bg-black/15" />
+                <span className="text-[0.5rem] uppercase tracking-[0.3em] text-black/40">Est. 1927</span>
+              </div>
+              <p className="mt-8 font-display text-3xl leading-tight sm:text-4xl">
+                Crafted for the journey, not just the destination.
+              </p>
+              <p className="mt-5 max-w-xs text-sm leading-7 text-black/55">
+                Each blend is designed to unfold gently inside your car—present, personal, and never overpowering.
+              </p>
+              <div className="mt-9 flex items-center gap-3">
+                <span className="size-1.5 rounded-full bg-black/50" />
+                <span className="h-px w-12 bg-black/20" />
+                <span className="size-1.5 rounded-full border border-black/35" />
+                <span className="h-px w-20 bg-black/20" />
+                <span className="size-2.5 rounded-full border border-black/35" />
+              </div>
+            </div>
+          </div>
+          <div className="lg:border-l lg:border-black/10 lg:pl-16">
+            <p className="font-display text-4xl leading-tight sm:text-6xl lg:text-7xl">
+              We do not begin with trends. We begin with a material worth remembering.
+            </p>
+            <div className="mt-10 flex items-center gap-5 border-t border-black/10 pt-6">
+              <span className="text-[0.5rem] uppercase tracking-[0.32em] text-black/40">Scent</span>
+              <span className="size-1 rounded-full bg-black/25" />
+              <span className="text-[0.5rem] uppercase tracking-[0.32em] text-black/40">Motion</span>
+              <span className="size-1 rounded-full bg-black/25" />
+              <span className="text-[0.5rem] uppercase tracking-[0.32em] text-black/40">Memory</span>
+            </div>
+          </div>
         </Container>
       </section>
       <section className="py-28 sm:py-40">

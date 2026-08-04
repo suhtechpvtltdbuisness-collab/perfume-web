@@ -24,33 +24,33 @@ export function ProductDetailView({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="bg-ink pb-32 pt-24">
-      <Container className="grid min-h-[calc(100vh-6rem)] gap-12 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+    <div className="bg-ink pb-24 pt-24 sm:pb-32">
+      <Container className="grid max-w-[1480px] gap-12 py-10 sm:py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(23rem,0.9fr)] lg:items-center lg:gap-14 xl:gap-20">
         <ProductMediaGallery product={product} />
-        <div className="lg:px-10">
+        <div className="mx-auto w-full max-w-xl lg:mx-0">
           <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">{product.family}</p>
-          <h1 className="mt-5 font-display text-6xl leading-[0.9] tracking-[-0.045em] sm:text-8xl">{product.name}</h1>
-          <p className="mt-4 text-xs uppercase tracking-luxury text-mist/45">{product.subtitle} · {product.size}</p>
-          <p className="mt-8 max-w-lg text-sm leading-7 text-mist/65">{product.description}</p>
-          <div className="mt-9 border-y border-white/10 py-7">
+          <h1 className="mt-4 text-balance font-display text-5xl leading-[0.9] tracking-[-0.045em] sm:text-6xl xl:text-7xl">{product.name}</h1>
+          <p className="mt-4 text-[0.62rem] uppercase leading-5 tracking-luxury text-mist/45">{product.subtitle} · {product.size}</p>
+          <p className="mt-6 max-w-lg text-sm leading-7 text-mist/65 sm:mt-7">{product.description}</p>
+          <div className="mt-7 border-y border-white/10 py-6 sm:mt-8">
             <p className="text-[0.52rem] uppercase tracking-luxury text-gold-400">Olfactory notes</p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              {product.notes.map((note) => <span key={note} className="border border-white/10 px-4 py-2 text-[0.58rem] uppercase tracking-editorial text-mist/70">{note}</span>)}
+            <div className="mt-4 flex flex-wrap gap-2">
+              {product.notes.map((note, index) => <span key={`${note}-${index}`} className="border border-white/10 px-3.5 py-2 text-[0.55rem] uppercase tracking-editorial text-mist/70">{note}</span>)}
             </div>
           </div>
-          <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-display text-3xl text-ivory">{formatPrice(product.price)}</p>
             <AddToCartButton product={product} />
           </div>
-          <ul className="mt-8 space-y-3 text-[0.6rem] uppercase tracking-editorial text-mist/50">
+          <ul className="mt-7 space-y-3 text-[0.55rem] uppercase leading-5 tracking-editorial text-mist/50">
             <li className="flex items-center gap-3"><Check className="size-3 text-gold-300" /> Complimentary delivery across India</li>
             <li className="flex items-center gap-3"><Check className="size-3 text-gold-300" /> Two samples with every order</li>
           </ul>
         </div>
       </Container>
-      <Container className="pt-24">
+      <Container className="max-w-[1480px] pt-20 sm:pt-24">
         <p className="text-[0.58rem] uppercase tracking-luxury text-gold-300">You may also like</p>
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.filter((item) => item.id !== product.id).slice(0, 3).map((item) => <ProductCard key={item.id} product={item} />)}
         </div>
       </Container>

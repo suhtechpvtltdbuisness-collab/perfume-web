@@ -52,26 +52,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!isReady || productsLoading || products.length === 0) return;
-    setItems((current) => {
-      const next = current
-        .map((item) => {
-          const fresh = products.find((product) => product.id === item.product.id);
-          return fresh ? { ...item, product: fresh } : null;
-        })
-        .filter((item): item is CartItem => item !== null);
+    const sync = window.setTimeout(() => {
+      setItems((current) => {
+        const next = current
+          .map((item) => {
+            const fresh = products.find((product) => product.id === item.product.id);
+            return fresh ? { ...item, product: fresh } : null;
+          })
+          .filter((item): item is CartItem => item !== null);
 
-      if (
-        next.length === current.length &&
-        next.every(
-          (item, index) =>
-            item.quantity === current[index]?.quantity &&
-            item.product === current[index]?.product,
-        )
-      ) {
-        return current;
-      }
-      return next;
-    });
+        if (
+          next.length === current.length &&
+          next.every(
+            (item, index) =>
+              item.quantity === current[index]?.quantity &&
+              item.product === current[index]?.product,
+          )
+        ) {
+          return current;
+        }
+        return next;
+      });
+    }, 0);
+
+    return () => window.clearTimeout(sync);
   }, [isReady, products, productsLoading]);
 
   useEffect(() => {

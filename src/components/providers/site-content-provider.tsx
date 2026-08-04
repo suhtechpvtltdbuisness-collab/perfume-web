@@ -52,7 +52,6 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let active = true;
-    setProductsLoading(true);
     void perfumeApi
       .list()
       .then(({ perfumes }) => {

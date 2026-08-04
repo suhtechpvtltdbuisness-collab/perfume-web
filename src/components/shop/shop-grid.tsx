@@ -50,22 +50,27 @@ export function ShopGrid() {
 
   return (
     <>
-      <div className="flex flex-wrap gap-2 border-y border-white/10 py-5">
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            type="button"
-            onClick={() => setActive(filter)}
-            className={cn(
-              "border px-5 py-2.5 text-[0.52rem] uppercase tracking-luxury transition",
-              active === filter
-                ? "border-gold-300 bg-gold-300 text-ink"
-                : "border-white/10 text-mist/55 hover:border-white/30 hover:text-ivory",
-            )}
-          >
-            {filter}
-          </button>
-        ))}
+      <div className="flex flex-col gap-5 border-y border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-2">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setActive(filter)}
+              className={cn(
+                "border px-5 py-2.5 text-[0.52rem] uppercase tracking-luxury transition",
+                active === filter
+                  ? "border-gold-300 bg-gold-300 text-ink"
+                  : "border-white/10 text-mist/55 hover:border-white/30 hover:text-ivory",
+              )}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+        <p className="shrink-0 text-[0.52rem] uppercase tracking-luxury text-mist/40">
+          {visible.length} {visible.length === 1 ? "fragrance" : "fragrances"}
+        </p>
       </div>
 
       {visible.length === 0 ? (
@@ -76,7 +81,7 @@ export function ShopGrid() {
           </Button>
         </div>
       ) : (
-        <div className="mt-12 grid gap-x-6 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid auto-rows-fr gap-x-5 gap-y-12 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-7 xl:gap-y-16">
           {visible.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

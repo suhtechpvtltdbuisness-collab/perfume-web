@@ -1,19 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
 import Lenis from "lenis";
 import gsap from "gsap";
 
 import { cn } from "@/lib/utils";
-import { SportsCarLoader } from "@/components/ui/sports-car-loader";
-
 export function ExperienceProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const cursor = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timer = window.setTimeout(() => setLoading(false), reduced ? 50 : 2800);
+    const timer = window.setTimeout(() => setLoading(false), reduced ? 50 : 1500);
     if (reduced) return () => window.clearTimeout(timer);
 
     const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
@@ -49,7 +48,21 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
         )}
         aria-hidden={!loading}
       >
-        <SportsCarLoader />
+        <div className="text-center">
+          <div className="relative mx-auto h-28 w-64 sm:h-32 sm:w-72">
+            <Image
+              src="/images/autoroma-logo-compact.png"
+              alt="Autoroma"
+              fill
+              priority
+              sizes="288px"
+              className="object-contain"
+            />
+          </div>
+          <div className="mx-auto mt-3 h-px w-32 overflow-hidden bg-white/10">
+            <div className="h-full origin-left animate-line-in bg-gold-300" />
+          </div>
+        </div>
       </div>
       <div
         ref={cursor}
