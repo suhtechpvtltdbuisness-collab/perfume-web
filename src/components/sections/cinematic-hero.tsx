@@ -48,12 +48,20 @@ export function CinematicHero() {
         <div className="absolute inset-0 bg-transparent"><PerfumeBottleCanvas progress={progress} /></div>
 
         <Container className="pointer-events-none relative z-10 h-full">
-          <div ref={intro} className="absolute inset-x-5 top-[18%] text-center sm:inset-x-8 lg:top-[16%]">
+          <div ref={intro} className="absolute inset-x-5 top-[15%] text-center sm:inset-x-8 sm:top-[14%] lg:top-[12%]">
             <p className="mb-5 text-[0.68rem] uppercase tracking-[0.46em] text-gold-300/95">The new olfactory signature</p>
-            <h1 className="mx-auto max-w-5xl text-balance font-display text-[17vw] leading-[0.8] tracking-[-0.055em] text-ivory sm:text-[8rem] lg:text-[10rem]">
-              Every drop<span className="block italic text-gold-300">defines elegance.</span>
+            <h1 className="mx-auto max-w-5xl text-balance font-display text-[13.5vw] leading-[0.84] tracking-[-0.045em] text-ivory sm:text-[6rem] lg:text-[7rem] xl:text-[7.5rem]">
+              Every drop
+              <span className="flex flex-wrap justify-center gap-x-[1.7em] italic text-gold-300">
+                <span className=" flex flex-wrap justify-center gap-x-[0.3em]">defines</span>
+                <span>elegance.</span>
+              </span>
             </h1>
-            <div className="pointer-events-auto mt-9"><Button href="/shop" showArrow>Explore collection</Button></div>
+            <div className="pointer-events-auto absolute left-1/2 top-[67vh] -translate-x-1/2 sm:top-[70vh] lg:top-[72vh]">
+              <Button href="/shop" showArrow className="whitespace-nowrap shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
+                Explore collection
+              </Button>
+            </div>
           </div>
 
           <div ref={sprayCopy} className="absolute right-5 top-[18%] max-w-xs opacity-0 sm:right-10 lg:right-20 lg:top-1/3">
