@@ -9,8 +9,6 @@ import { Reveal } from "@/components/animations/reveal";
 
 export function CollectionSection() {
   const { products, productsLoading } = useSiteContent();
-  const featured = products.filter((product) => product.featured);
-  const visible = (featured.length > 0 ? featured : products).slice(0, 4);
 
   return (
     <section id="collection" className="bg-ink py-28 sm:py-36 lg:py-44">
@@ -24,14 +22,14 @@ export function CollectionSection() {
 
         {productsLoading ? (
           <p className="mt-16 text-sm text-mist/50">Loading fragrances…</p>
-        ) : visible.length === 0 ? (
+        ) : products.length === 0 ? (
           <p className="mt-16 max-w-md text-sm leading-7 text-mist/55">
             The catalogue is empty. Publish fragrances from the admin dashboard to feature them here.
           </p>
         ) : (
-          <div className="mt-16 grid gap-x-6 gap-y-14 md:grid-cols-2 xl:grid-cols-4">
-            {visible.map((product, index) => (
-              <Reveal key={product.id} delay={index * 0.1}>
+          <div className="mt-16 grid auto-rows-fr gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {products.map((product, index) => (
+              <Reveal key={product.id} delay={(index % 4) * 0.08} className="h-full">
                 <ProductCard product={product} />
               </Reveal>
             ))}

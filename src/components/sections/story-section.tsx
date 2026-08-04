@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { useSiteContent } from "@/components/providers/site-content-provider";
@@ -8,25 +10,53 @@ import { Reveal } from "@/components/animations/reveal";
 export function StorySection() {
   const { landing } = useSiteContent();
   return (
-    <section className="relative overflow-hidden bg-[#ded8ca] py-32 text-ink sm:py-44 lg:py-56">
-      <div className="absolute -right-20 top-1/2 size-[34rem] -translate-y-1/2 rounded-full border border-black/10" />
-      <Container className="relative grid gap-14 lg:grid-cols-[0.7fr_1.3fr]">
-        <p className="text-[0.58rem] font-semibold uppercase tracking-[0.4em] text-black/50">
-          Paris · 1927
-        </p>
-        <Reveal>
-        <div>
-          <blockquote className="text-balance font-display text-5xl leading-[0.98] tracking-[-0.035em] sm:text-7xl lg:text-8xl">
-            “{landing.storyQuote}”
-          </blockquote>
-          <p className="mt-9 max-w-lg text-sm leading-7 text-black/60">
-            {landing.storyDescription}
-          </p>
-          <Button href="/story" variant="outline" showArrow className="mt-9 border-black/20 text-ink hover:border-black hover:text-ink">
-            Read our story
-          </Button>
-        </div>
+    <section className="relative overflow-hidden bg-[#ded8ca] py-20 text-ink sm:py-28 lg:py-32">
+      <div className="pointer-events-none absolute -right-40 -top-40 size-[36rem] rounded-full border border-black/[0.07]" />
+      <Container className="relative grid items-stretch gap-0 lg:grid-cols-[0.85fr_1.15fr]">
+        <Reveal className="relative z-10">
+          <div className="relative min-h-[30rem] overflow-hidden rounded-2xl bg-ink shadow-[0_35px_100px_rgba(35,27,16,0.28)] sm:min-h-[38rem] lg:h-full">
+            <Image
+              src="/images/autoroma-car-fragrance-story.png"
+              alt="Autoroma car fragrance in a premium interior"
+              fill
+              sizes="(min-width: 1024px) 42vw, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/20" />
+            <div className="absolute inset-5 rounded-xl border border-white/15" />
+            <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-white sm:inset-x-10 sm:bottom-10">
+              <div>
+                <p className="text-[0.5rem] uppercase tracking-[0.4em] text-white/55">Designed for motion</p>
+                <p className="mt-3 max-w-xs font-display text-3xl leading-none sm:text-4xl">A signature for every journey.</p>
+              </div>
+              <span className="hidden size-12 items-center justify-center rounded-full border border-white/25 font-display text-xl italic sm:flex">A</span>
+            </div>
+          </div>
         </Reveal>
+
+        <div className="relative flex items-center py-12 lg:-ml-8 lg:py-16 lg:pl-24">
+          <div className="absolute left-0 top-1/2 hidden h-px w-16 bg-black/20 lg:block" />
+          <Reveal delay={0.12}>
+            <div>
+              <div className="flex items-center gap-4">
+                <span className="h-px w-10 bg-[#c81424]" />
+                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.4em] text-black/50">On the road · Since 1927</p>
+              </div>
+              <blockquote className="mt-8 text-balance font-display text-5xl leading-[0.94] tracking-[-0.04em] sm:text-6xl xl:text-7xl">
+                “{landing.storyQuote}”
+              </blockquote>
+              <p className="mt-8 max-w-lg text-sm leading-7 text-black/60">
+                {landing.storyDescription}
+              </p>
+              <div className="mt-9 flex flex-wrap items-center gap-6">
+                <Button href="/story" variant="outline" showArrow className="border-black/20 text-ink hover:border-black hover:text-ink">
+                  Read our story
+                </Button>
+                <p className="text-[0.48rem] uppercase tracking-[0.28em] text-black/40">Scent · Motion · Memory</p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </Container>
     </section>
   );
