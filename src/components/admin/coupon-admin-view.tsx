@@ -60,10 +60,16 @@ export function CouponAdminView({ products }: { products: Product[] }) {
   );
   const resetPage = () => setPage(1);
 
-  const save = (input: CouponInput) => {
-    if (editing === "new") createCoupon(input);
-    else if (editing) updateCoupon(editing.id, input);
-    setEditing(null);
+  const save = async (input: CouponInput) => {
+    try {
+      if (editing === "new") await createCoupon(input);
+      else if (editing) await updateCoupon(editing.id, input);
+      setEditing(null);
+    } catch (error) {
+      window.alert(
+        error instanceof Error ? error.message : "Failed to save coupon",
+      );
+    }
   };
 
   return (
@@ -212,7 +218,15 @@ export function CouponAdminView({ products }: { products: Product[] }) {
                         label={
                           coupon.status === "active" ? "Disable" : "Enable"
                         }
-                        onClick={() => toggleCoupon(coupon.id)}
+                        onClick={() => {
+                          void toggleCoupon(coupon.id).catch((error) =>
+                            window.alert(
+                              error instanceof Error
+                                ? error.message
+                                : "Failed to update coupon",
+                            ),
+                          );
+                        }}
                       >
                         <Power />
                       </Action>
@@ -220,8 +234,15 @@ export function CouponAdminView({ products }: { products: Product[] }) {
                         label="Delete"
                         danger
                         onClick={() => {
-                          if (window.confirm(`Delete coupon ${coupon.code}?`))
-                            deleteCoupon(coupon.id);
+                          if (!window.confirm(`Delete coupon ${coupon.code}?`))
+                            return;
+                          void deleteCoupon(coupon.id).catch((error) =>
+                            window.alert(
+                              error instanceof Error
+                                ? error.message
+                                : "Failed to delete coupon",
+                            ),
+                          );
                         }}
                       >
                         <Trash2 />

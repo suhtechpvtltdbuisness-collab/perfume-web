@@ -13,7 +13,13 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     const timer = window.setTimeout(() => setLoading(false), reduced ? 50 : 1500);
     if (reduced) return () => window.clearTimeout(timer);
 
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    const lenis = new Lenis({
+      duration: 1.15,
+      smoothWheel: true,
+      prevent: (node) =>
+        node.hasAttribute("data-lenis-prevent") ||
+        Boolean(node.closest("[data-lenis-prevent]")),
+    });
     let frame = 0;
     const raf = (time: number) => {
       lenis.raf(time);

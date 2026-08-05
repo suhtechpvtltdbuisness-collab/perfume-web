@@ -11,8 +11,9 @@ import {
 } from "react";
 import { Check, X } from "lucide-react";
 
+import { useAuth } from "@/components/providers/auth-provider";
 import { useCart } from "@/components/providers/cart-provider";
-import { demoCoupons } from "@/constants/coupons";
+import { couponApi } from "@/lib/coupon-api";
 import {
   calculateCouponDiscount,
   isCouponApplicable,
@@ -38,23 +39,22 @@ interface CouponContextValue {
   couponDiscount: number;
   loading: boolean;
   validationError: string | null;
-  createCoupon: (input: CouponInput) => Coupon;
-  updateCoupon: (id: string, input: CouponInput) => void;
-  deleteCoupon: (id: string) => void;
-  toggleCoupon: (id: string) => void;
+  createCoupon: (input: CouponInput) => Promise<Coupon>;
+  updateCoupon: (id: string, input: CouponInput) => Promise<void>;
+  deleteCoupon: (id: string) => Promise<void>;
+  toggleCoupon: (id: string) => Promise<void>;
   selectCoupon: (coupon: Coupon | null) => void;
   applyCoupon: (
     code: string,
     override?: CouponContextInput,
   ) => CouponValidationResult;
   removeCoupon: () => void;
-  completeCouponRedemption: () => void;
+  completeCouponRedemption: () => Promise<void>;
   couponsForProduct: (productId: string, category?: string) => Coupon[];
   notify: (message: string, type?: "success" | "error") => void;
 }
 
 const CouponContext = createContext<CouponContextValue | null>(null);
-const couponStorageKey = "autoroma-coupons";
 const appliedStorageKey = "autoroma-applied-coupon";
 const redeemedStorageKey = "autoroma-redeemed-coupons";
 
@@ -68,8 +68,9 @@ function safeRead<T>(key: string, fallback: T): T {
 }
 
 export function CouponProvider({ children }: { children: ReactNode }) {
+  const { accessToken } = useAuth();
   const { items, subtotal } = useCart();
-  const [coupons, setCoupons] = useState<Coupon[]>(demoCoupons);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [redeemedCodes, setRedeemedCodes] = useState<string[]>([]);
@@ -79,30 +80,39 @@ export function CouponProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastState | null>(null);
 
   useEffect(() => {
-    const hydrate = window.setTimeout(() => {
-      const storedCoupons = safeRead<Coupon[]>(couponStorageKey, demoCoupons);
-      setCoupons(Array.isArray(storedCoupons) ? storedCoupons : demoCoupons);
-      setAppliedCode(safeRead<string | null>(appliedStorageKey, null));
-      setRedeemedCodes(safeRead<string[]>(redeemedStorageKey, []));
-      setLoading(false);
-    }, 0);
-    return () => window.clearTimeout(hydrate);
+    setAppliedCode(safeRead<string | null>(appliedStorageKey, null));
+    setRedeemedCodes(safeRead<string[]>(redeemedStorageKey, []));
   }, []);
 
   useEffect(() => {
-    if (loading) return;
-    window.localStorage.setItem(couponStorageKey, JSON.stringify(coupons));
-  }, [coupons, loading]);
+    let active = true;
+    setLoading(true);
+    void couponApi
+      .list(accessToken)
+      .then((list) => {
+        if (!active) return;
+        setCoupons(list);
+      })
+      .catch(() => {
+        if (!active) return;
+        setCoupons([]);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [accessToken]);
 
   useEffect(() => {
-    if (loading) return;
     if (appliedCode)
       window.localStorage.setItem(
         appliedStorageKey,
         JSON.stringify(appliedCode),
       );
     else window.localStorage.removeItem(appliedStorageKey);
-  }, [appliedCode, loading]);
+  }, [appliedCode]);
 
   useEffect(() => {
     if (!toast) return;
@@ -184,6 +194,97 @@ export function CouponProvider({ children }: { children: ReactNode }) {
     if (code) notify(`${code} removed from your order.`);
   }, [appliedCode, notify]);
 
+  const createCouponFn = useCallback(
+    async (input: CouponInput) => {
+      if (!accessToken) throw new Error("Admin authentication required");
+      const coupon = await couponApi.create(input, accessToken);
+      setCoupons((current) => [coupon, ...current]);
+      notify(`${coupon.code} created.`);
+      return coupon;
+    },
+    [accessToken, notify],
+  );
+
+  const updateCouponFn = useCallback(
+    async (id: string, input: CouponInput) => {
+      if (!accessToken) throw new Error("Admin authentication required");
+      const saved = await couponApi.update(id, input, accessToken);
+      setCoupons((current) =>
+        current.map((coupon) => (coupon.id === id ? saved : coupon)),
+      );
+      notify("Coupon updated.");
+    },
+    [accessToken, notify],
+  );
+
+  const deleteCouponFn = useCallback(
+    async (id: string) => {
+      if (!accessToken) throw new Error("Admin authentication required");
+      await couponApi.remove(id, accessToken);
+      setCoupons((current) => current.filter((coupon) => coupon.id !== id));
+      if (appliedCoupon?.id === id) setAppliedCode(null);
+      notify("Coupon deleted.");
+    },
+    [accessToken, appliedCoupon?.id, notify],
+  );
+
+  const toggleCouponFn = useCallback(
+    async (id: string) => {
+      if (!accessToken) throw new Error("Admin authentication required");
+      const existing = coupons.find((coupon) => coupon.id === id);
+      if (!existing) return;
+      const input: CouponInput = {
+        name: existing.name,
+        code: existing.code,
+        description: existing.description,
+        discountType: existing.discountType,
+        discountValue: existing.discountValue,
+        minimumOrderAmount: existing.minimumOrderAmount,
+        maximumDiscount: existing.maximumDiscount,
+        usageLimit: existing.usageLimit,
+        perUserLimit: existing.perUserLimit,
+        validFrom: existing.validFrom,
+        validUntil: existing.validUntil,
+        status: existing.status === "active" ? "inactive" : "active",
+        applicableOn: existing.applicableOn,
+        productIds: existing.productIds,
+        categories: existing.categories,
+        brands: existing.brands,
+      };
+      const saved = await couponApi.update(id, input, accessToken);
+      setCoupons((current) =>
+        current.map((coupon) => (coupon.id === id ? saved : coupon)),
+      );
+      notify("Coupon status updated.");
+    },
+    [accessToken, coupons, notify],
+  );
+
+  const completeCouponRedemption = useCallback(async () => {
+    if (!appliedCoupon) return;
+    const next = [...new Set([...redeemedCodes, appliedCoupon.code])];
+    setRedeemedCodes(next);
+    window.localStorage.setItem(redeemedStorageKey, JSON.stringify(next));
+    try {
+      const redeemed = await couponApi.redeem(appliedCoupon.code);
+      setCoupons((current) =>
+        current.map((coupon) =>
+          coupon.id === redeemed.id ? redeemed : coupon,
+        ),
+      );
+    } catch {
+      setCoupons((current) =>
+        current.map((coupon) =>
+          coupon.id === appliedCoupon.id
+            ? { ...coupon, usedCount: coupon.usedCount + 1 }
+            : coupon,
+        ),
+      );
+    }
+    setAppliedCode(null);
+    setSelectedCoupon(null);
+  }, [appliedCoupon, redeemedCodes]);
+
   const value = useMemo<CouponContextValue>(
     () => ({
       coupons,
@@ -193,66 +294,14 @@ export function CouponProvider({ children }: { children: ReactNode }) {
       couponDiscount,
       loading,
       validationError,
-      createCoupon: (input) => {
-        const now = new Date().toISOString();
-        const coupon: Coupon = {
-          ...input,
-          id: `coupon-${Date.now()}`,
-          usedCount: 0,
-          createdAt: now,
-          updatedAt: now,
-        };
-        setCoupons((current) => [coupon, ...current]);
-        notify(`${coupon.code} created.`);
-        return coupon;
-      },
-      updateCoupon: (id, input) => {
-        setCoupons((current) =>
-          current.map((coupon) =>
-            coupon.id === id
-              ? { ...coupon, ...input, updatedAt: new Date().toISOString() }
-              : coupon,
-          ),
-        );
-        notify("Coupon updated.");
-      },
-      deleteCoupon: (id) => {
-        setCoupons((current) => current.filter((coupon) => coupon.id !== id));
-        if (appliedCoupon?.id === id) setAppliedCode(null);
-        notify("Coupon deleted.");
-      },
-      toggleCoupon: (id) => {
-        setCoupons((current) =>
-          current.map((coupon) =>
-            coupon.id === id
-              ? {
-                  ...coupon,
-                  status: coupon.status === "active" ? "inactive" : "active",
-                  updatedAt: new Date().toISOString(),
-                }
-              : coupon,
-          ),
-        );
-        notify("Coupon status updated.");
-      },
+      createCoupon: createCouponFn,
+      updateCoupon: updateCouponFn,
+      deleteCoupon: deleteCouponFn,
+      toggleCoupon: toggleCouponFn,
       selectCoupon: setSelectedCoupon,
       applyCoupon,
       removeCoupon: removeAppliedCoupon,
-      completeCouponRedemption: () => {
-        if (!appliedCoupon) return;
-        const next = [...new Set([...redeemedCodes, appliedCoupon.code])];
-        setRedeemedCodes(next);
-        window.localStorage.setItem(redeemedStorageKey, JSON.stringify(next));
-        setCoupons((current) =>
-          current.map((coupon) =>
-            coupon.id === appliedCoupon.id
-              ? { ...coupon, usedCount: coupon.usedCount + 1 }
-              : coupon,
-          ),
-        );
-        setAppliedCode(null);
-        setSelectedCoupon(null);
-      },
+      completeCouponRedemption,
       couponsForProduct: (productId, category) =>
         coupons.filter((coupon) => {
           const productContext: CouponContextInput = {
@@ -274,14 +323,18 @@ export function CouponProvider({ children }: { children: ReactNode }) {
       appliedCoupon,
       applyCoupon,
       availableCoupons,
+      completeCouponRedemption,
       couponDiscount,
       coupons,
+      createCouponFn,
       currentTime,
+      deleteCouponFn,
       loading,
       notify,
-      redeemedCodes,
       removeAppliedCoupon,
       selectedCoupon,
+      toggleCouponFn,
+      updateCouponFn,
       validationError,
     ],
   );

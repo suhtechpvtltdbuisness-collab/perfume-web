@@ -15,9 +15,9 @@ export function CheckoutForm() {
   const { completeCouponRedemption } = useCoupons();
   const [complete, setComplete] = useState(false);
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    completeCouponRedemption();
+    await completeCouponRedemption();
     clearCart();
     setComplete(true);
   };
