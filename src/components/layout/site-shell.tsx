@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
+import { CouponProvider } from "@/components/providers/coupon-provider";
 import { ExperienceProvider } from "@/components/providers/experience-provider";
 import { SiteContentProvider } from "@/components/providers/site-content-provider";
 
@@ -13,6 +14,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <AuthProvider>
         <SiteContentProvider>
           <CartProvider>
+            <CouponProvider>
             <a
               href="#main-content"
               className="fixed left-4 top-4 z-[100] -translate-y-24 bg-ivory px-4 py-3 text-xs font-semibold uppercase tracking-widest text-ink transition-transform focus:translate-y-0"
@@ -22,6 +24,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <Navbar />
             <main id="main-content">{children}</main>
             <Footer />
+            </CouponProvider>
           </CartProvider>
         </SiteContentProvider>
       </AuthProvider>

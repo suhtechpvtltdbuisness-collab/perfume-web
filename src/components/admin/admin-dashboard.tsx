@@ -2,9 +2,11 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, LogOut, Package, Pencil, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { LayoutDashboard, LogOut, Package, Pencil, Plus, RotateCcw, TicketPercent, Trash2 } from "lucide-react";
 
+import { CouponAdminView } from "@/components/admin/coupon-admin-view";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useCoupons } from "@/components/providers/coupon-provider";
 import { useSiteContent } from "@/components/providers/site-content-provider";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/auth-api";
@@ -13,7 +15,7 @@ import type { Product } from "@/types/product";
 import type { LandingContent } from "@/types/site-content";
 import { PerfumeFormModal } from "@/components/admin/perfume-form-modal";
 
-type AdminView = "overview" | "landing" | "products";
+type AdminView = "overview" | "landing" | "products" | "coupons";
 
 const emptyProduct: Product = {
   id: "",
@@ -32,6 +34,7 @@ const emptyProduct: Product = {
 
 export function AdminDashboard() {
   const content = useSiteContent();
+  const { coupons } = useCoupons();
   const router = useRouter();
   const { user, isReady, logout } = useAuth();
   const [view, setView] = useState<AdminView>("overview");
@@ -75,6 +78,7 @@ export function AdminDashboard() {
             <AdminNav active={view === "overview"} onClick={() => setView("overview")} icon={<LayoutDashboard className="size-4" />}>Overview</AdminNav>
             <AdminNav active={view === "landing"} onClick={() => setView("landing")} icon={<Pencil className="size-4" />}>Landing page</AdminNav>
             <AdminNav active={view === "products"} onClick={() => setView("products")} icon={<Package className="size-4" />}>Products</AdminNav>
+            <AdminNav active={view === "coupons"} onClick={() => setView("coupons")} icon={<TicketPercent className="size-4" />}>Coupons</AdminNav>
           </nav>
           <button onClick={() => void logout()} className="mt-6 flex items-center gap-3 text-[0.62rem] uppercase tracking-editorial text-ivory hover:text-ivory lg:mt-12">
             <LogOut className="size-4" /> Sign out
@@ -85,9 +89,10 @@ export function AdminDashboard() {
           {view === "overview" && (
             <>
               <AdminHeading eyebrow="Dashboard" title="Good evening." description="Manage the storefront experience from one place." />
-              <div className="mt-12 grid gap-5 sm:grid-cols-3">
+              <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
                 <Stat label="Products" value={String(content.products.length)} />
                 <Stat label="Featured scents" value={String(content.products.filter((item) => item.featured).length)} />
+                <Stat label="Active coupons" value={String(coupons.filter((coupon) => coupon.status === "active").length)} />
                 <Stat label="Storefront" value="Live" />
               </div>
               <div className="mt-10 border border-white/20 bg-white/[0.06] p-7">
@@ -148,6 +153,8 @@ export function AdminDashboard() {
               </div>
             </>
           )}
+
+          {view === "coupons" && <CouponAdminView products={content.products} />}
         </main>
       </div>
 

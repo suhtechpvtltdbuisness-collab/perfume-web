@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { formatPrice } from "@/constants/products";
 import { ProductMediaGallery } from "@/components/product/product-media-gallery";
+import { ProductCoupons } from "@/components/coupon/product-coupons";
 
 export function ProductDetailView({ slug }: { slug: string }) {
   const { products } = useSiteContent();
@@ -42,6 +43,7 @@ export function ProductDetailView({ slug }: { slug: string }) {
             <p className="font-display text-3xl text-ivory">{formatPrice(product.price)}</p>
             <AddToCartButton product={product} />
           </div>
+          <ProductCoupons product={product} />
           <ul className="mt-7 space-y-3 text-[0.65rem] uppercase leading-5 tracking-editorial text-mist/75">
             <li className="flex items-center gap-3"><Check className="size-3 text-gold-300" /> Complimentary delivery across India</li>
             <li className="flex items-center gap-3"><Check className="size-3 text-gold-300" /> Two samples with every order</li>

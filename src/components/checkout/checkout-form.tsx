@@ -6,13 +6,18 @@ import { CheckCircle2, LockKeyhole } from "lucide-react";
 import { useCart } from "@/components/providers/cart-provider";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/constants/products";
+import { CouponPanel } from "@/components/coupon/coupon-panel";
+import { PriceSummary } from "@/components/cart/price-summary";
+import { useCoupons } from "@/components/providers/coupon-provider";
 
 export function CheckoutForm() {
   const { items, subtotal, clearCart } = useCart();
+  const { completeCouponRedemption } = useCoupons();
   const [complete, setComplete] = useState(false);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    completeCouponRedemption();
     clearCart();
     setComplete(true);
   };
@@ -73,7 +78,8 @@ export function CheckoutForm() {
             </div>
           ))}
         </div>
-        <div className="flex justify-between py-6 font-display text-xl"><span>Total</span><span>{formatPrice(subtotal)}</span></div>
+        <PriceSummary subtotal={subtotal} />
+        <div className="my-6"><CouponPanel compact /></div>
         <Button type="submit" className="w-full">Place order</Button>
       </aside>
     </form>

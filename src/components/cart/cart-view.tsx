@@ -7,6 +7,8 @@ import { useCart } from "@/components/providers/cart-provider";
 import { ProductThumbnail } from "@/components/product/product-thumbnail";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/constants/products";
+import { CouponPanel } from "@/components/coupon/coupon-panel";
+import { PriceSummary } from "@/components/cart/price-summary";
 
 export function CartView() {
   const { items, subtotal, removeItem, updateQuantity } = useCart();
@@ -23,6 +25,7 @@ export function CartView() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
+      <div>
       <div className="divide-y divide-white/10 border-y border-white/10">
         {items.map(({ product, quantity }) => (
           <article key={product.id} className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-4 py-6 min-[380px]:grid-cols-[7rem_minmax(0,1fr)] min-[380px]:gap-5 sm:grid-cols-[10rem_minmax(0,1fr)_auto] sm:items-center sm:py-7">
@@ -60,13 +63,11 @@ export function CartView() {
           </article>
         ))}
       </div>
+      <div className="mt-8"><CouponPanel /></div>
+      </div>
       <aside className="h-fit border border-white/10 bg-white/[0.025] p-7">
         <h2 className="font-display text-3xl">Order summary</h2>
-        <div className="mt-7 space-y-4 border-y border-white/10 py-6 text-xs text-mist/80">
-          <div className="flex justify-between"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></div>
-          <div className="flex justify-between"><span>Delivery</span><span>Complimentary</span></div>
-        </div>
-        <div className="flex justify-between py-6 font-display text-xl"><span>Total</span><span>{formatPrice(subtotal)}</span></div>
+        <PriceSummary subtotal={subtotal} />
         <Button href="/checkout" className="w-full">Proceed to checkout</Button>
         <p className="mt-5 text-center text-[0.6rem] uppercase tracking-editorial text-mist/75">Secure encrypted checkout</p>
       </aside>
