@@ -14,7 +14,7 @@ export function NewsletterSection() {
       <Container>
         <Reveal>
           <SectionHeading
-          eyebrow="The private list"
+          eyebrow={landing.newsletterEyebrow}
           title={landing.newsletterTitle}
           description={landing.newsletterDescription}
           align="center"
@@ -22,7 +22,7 @@ export function NewsletterSection() {
         </Reveal>
         <form className="mx-auto mt-12 flex max-w-xl border-b border-white/25 focus-within:border-gold-300">
           <label htmlFor="newsletter-email" className="sr-only">Email address</label>
-          <input id="newsletter-email" type="email" required placeholder="Your email address" className="min-w-0 flex-1 bg-transparent py-5 text-sm text-ivory outline-none placeholder:text-mist/75" />
+          <input id="newsletter-email" type="email" required placeholder={landing.newsletterPlaceholder} className="min-w-0 flex-1 bg-transparent py-5 text-sm text-ivory outline-none placeholder:text-mist/75" />
           <button type="submit" aria-label="Subscribe" className="px-3 text-gold-300 transition hover:translate-x-1">
             <ArrowRight className="size-5" />
           </button>

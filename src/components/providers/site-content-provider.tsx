@@ -12,42 +12,43 @@ import {
 
 import { useAuth } from "@/components/providers/auth-provider";
 import { defaultSiteContent } from "@/constants/site-content";
+import { landingApi } from "@/lib/landing-api";
 import { perfumeApi } from "@/lib/perfume-api";
 import type { Product } from "@/types/product";
 import type { LandingContent, ManagedSiteContent } from "@/types/site-content";
 
 interface SiteContentContextValue extends ManagedSiteContent {
-  updateLanding: (landing: LandingContent) => void;
+  updateLanding: (landing: LandingContent) => Promise<void>;
   saveProduct: (product: Product) => Promise<Product>;
   deleteProduct: (id: string) => Promise<void>;
-  resetContent: () => void;
+  resetContent: () => Promise<void>;
   productsLoading: boolean;
+  landingLoading: boolean;
 }
 
 const SiteContentContext = createContext<SiteContentContextValue | null>(null);
-const storageKey = "autoroma-site-content";
 
 export function SiteContentProvider({ children }: { children: ReactNode }) {
   const { accessToken } = useAuth();
   const [content, setContent] = useState<ManagedSiteContent>(defaultSiteContent);
-  const [ready, setReady] = useState(false);
   const [productsLoading, setProductsLoading] = useState(true);
+  const [landingLoading, setLandingLoading] = useState(true);
 
   useEffect(() => {
-    const hydrate = window.setTimeout(() => {
-      try {
-        const stored = window.localStorage.getItem(storageKey);
-        if (stored) {
-          const parsed = JSON.parse(stored) as ManagedSiteContent;
-          setContent((current) => ({ ...current, landing: parsed.landing ?? current.landing }));
-        }
-      } catch {
-        window.localStorage.removeItem(storageKey);
-      } finally {
-        setReady(true);
-      }
-    }, 0);
-    return () => window.clearTimeout(hydrate);
+    let active = true;
+    void landingApi
+      .get()
+      .then(({ landing }) => {
+        if (!active) return;
+        setContent((current) => ({ ...current, landing }));
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (active) setLandingLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -70,17 +71,14 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  useEffect(() => {
-    if (!ready) return;
-    window.localStorage.setItem(
-      storageKey,
-      JSON.stringify({ landing: content.landing }),
-    );
-  }, [content.landing, ready]);
-
-  const updateLanding = useCallback((landing: LandingContent) => {
-    setContent((current) => ({ ...current, landing }));
-  }, []);
+  const updateLanding = useCallback(
+    async (landing: LandingContent) => {
+      if (!accessToken) throw new Error("Admin authentication required");
+      const response = await landingApi.update(landing, accessToken);
+      setContent((current) => ({ ...current, landing: response.landing }));
+    },
+    [accessToken],
+  );
 
   const saveProduct = useCallback(
     async (product: Product) => {
@@ -118,12 +116,11 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
     [accessToken],
   );
 
-  const resetContent = useCallback(() => {
-    setContent((current) => ({
-      ...defaultSiteContent,
-      products: current.products,
-    }));
-  }, []);
+  const resetContent = useCallback(async () => {
+    if (!accessToken) throw new Error("Admin authentication required");
+    const response = await landingApi.reset(accessToken);
+    setContent((current) => ({ ...current, landing: response.landing }));
+  }, [accessToken]);
 
   const value = useMemo(
     () => ({
@@ -133,8 +130,17 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
       deleteProduct,
       resetContent,
       productsLoading,
+      landingLoading,
     }),
-    [content, deleteProduct, productsLoading, resetContent, saveProduct, updateLanding],
+    [
+      content,
+      deleteProduct,
+      landingLoading,
+      productsLoading,
+      resetContent,
+      saveProduct,
+      updateLanding,
+    ],
   );
 
   return <SiteContentContext.Provider value={value}>{children}</SiteContentContext.Provider>;

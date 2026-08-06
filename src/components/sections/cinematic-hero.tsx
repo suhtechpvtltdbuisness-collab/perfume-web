@@ -8,6 +8,7 @@ import { ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { useSiteContent } from "@/components/providers/site-content-provider";
 
 const PerfumeBottleCanvas = dynamic(
   () => import("@/components/three/perfume-bottle-canvas").then((module) => module.PerfumeBottleCanvas),
@@ -15,6 +16,7 @@ const PerfumeBottleCanvas = dynamic(
 );
 
 export function CinematicHero() {
+  const { landing } = useSiteContent();
   const section = useRef<HTMLElement>(null);
   const intro = useRef<HTMLDivElement>(null);
   const sprayCopy = useRef<HTMLDivElement>(null);
@@ -48,38 +50,39 @@ export function CinematicHero() {
         <div className="absolute inset-0 bg-transparent"><PerfumeBottleCanvas progress={progress} /></div>
 
         <Container className="pointer-events-none relative z-10 h-full">
-          <div ref={intro} className="absolute inset-x-5 top-[15%] text-center sm:inset-x-8 sm:top-[14%] lg:top-[12%]">
-            <p className="mb-5 text-[0.68rem] uppercase tracking-[0.46em] text-gold-300/95">The new olfactory signature</p>
+          <div ref={intro} className="absolute inset-x-5 top-[max(6rem,15%)] text-center sm:inset-x-8 sm:top-[max(7rem,14%)] lg:top-[max(7rem,12%)]">
+            <p className="mb-5 text-[0.68rem] uppercase tracking-[0.46em] text-gold-300/95">{landing.heroEyebrow}</p>
             <h1 className="mx-auto max-w-5xl text-balance font-display text-[13.5vw] leading-[0.84] tracking-[-0.045em] text-ivory sm:text-[6rem] lg:text-[7rem] xl:text-[7.5rem]">
-              Every drop
-              <span className="flex flex-wrap justify-center gap-x-[1.7em] italic text-gold-300">
-                <span className=" flex flex-wrap justify-center gap-x-[0.3em]">defines</span>
-                <span>elegance.</span>
+              {landing.heroTitleLead}
+              <span className="flex flex-wrap justify-center gap-x-[0.3em] italic text-gold-300">
+                {landing.heroTitleHighlight.split(" ").map((word, index) => (
+                  <span key={`${word}-${index}`}>{word}</span>
+                ))}
               </span>
             </h1>
             <div className="pointer-events-auto absolute left-1/2 top-[67vh] -translate-x-1/2 sm:top-[70vh] lg:top-[72vh]">
-              <Button href="/shop" showArrow className="whitespace-nowrap shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
-                Explore collection
+              <Button href={landing.heroPrimaryCtaHref} showArrow className="whitespace-nowrap shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
+                {landing.heroPrimaryCtaLabel}
               </Button>
             </div>
           </div>
 
           <div ref={sprayCopy} className="absolute right-5 top-[18%] max-w-xs opacity-0 sm:right-10 lg:right-20 lg:top-1/3">
-            <p className="text-[0.68rem] uppercase tracking-luxury text-gold-300">The awakening</p>
-            <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-6xl">A thousand luminous molecules.</h2>
-            <p className="mt-5 text-sm leading-6 text-mist/80">Scroll slowly. The cap lifts, the atomizer presses, and scent becomes light.</p>
+            <p className="text-[0.68rem] uppercase tracking-luxury text-gold-300">{landing.heroSprayEyebrow}</p>
+            <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-6xl">{landing.heroSprayTitle}</h2>
+            <p className="mt-5 text-sm leading-6 text-mist/80">{landing.heroSprayDescription}</p>
           </div>
 
           <div ref={finalCopy} className="absolute left-5 top-1/3 max-w-sm opacity-0 sm:left-10 lg:left-20">
-            <p className="text-[0.68rem] uppercase tracking-luxury text-gold-300">Autoroma</p>
-            <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-7xl">Crafted to remain.</h2>
-            <div className="pointer-events-auto mt-8"><Button href="/shop" variant="outline" showArrow>Discover the scents</Button></div>
+            <p className="text-[0.68rem] uppercase tracking-luxury text-gold-300">{landing.heroFinalEyebrow}</p>
+            <h2 className="mt-4 font-display text-5xl leading-none text-ivory sm:text-7xl">{landing.heroFinalTitle}</h2>
+            <div className="pointer-events-auto mt-8"><Button href={landing.heroFinalCtaHref} variant="outline" showArrow>{landing.heroFinalCtaLabel}</Button></div>
           </div>
         </Container>
 
         <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center text-mist/70">
           <ChevronDown className="mx-auto size-4 animate-bounce" />
-          <span className="mt-2 block text-[0.62rem] uppercase tracking-luxury">Scroll to unveil</span>
+          <span className="mt-2 block text-[0.62rem] uppercase tracking-luxury">{landing.heroScrollHint}</span>
         </div>
       </div>
     </section>
