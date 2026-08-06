@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
+
 import { Container } from "@/components/ui/container";
-import { BottleArt } from "@/components/ui/bottle-art";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { useSiteContent } from "@/components/providers/site-content-provider";
 import { Reveal } from "@/components/animations/reveal";
@@ -16,8 +17,17 @@ export function SignatureSection() {
       <Container className="grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
         <Reveal>
           <div className="relative border border-white/[0.08] bg-black shadow-[0_50px_140px_rgba(0,0,0,0.65)]">
-            <BottleArt accent="bg-[#93601f]" name={landing.signatureBottleName} />
-            <span className="absolute bottom-7 left-7 text-[0.6rem] uppercase tracking-luxury text-mist/70">
+            <div className="relative aspect-[4/5] overflow-hidden">
+              <Image
+                src="/images/modish-seduction-signature.png"
+                alt="Autoroma Modish Seduction car perfume surrounded by teal fragrance mist"
+                fill
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+            </div>
+            <span className="absolute bottom-7 left-7 z-10 text-[0.6rem] uppercase tracking-luxury text-mist/80">
               {landing.signatureBottleCaption}
             </span>
           </div>
@@ -32,7 +42,9 @@ export function SignatureSection() {
             <div className="mt-12 grid grid-cols-3 gap-2 border-t border-white/10 pt-8 sm:gap-3">
               {landing.signatureStats.map((stat, index) => (
                 <div key={`${stat.label}-${index}`}>
-                  <p className="font-display text-2xl text-gold-300 min-[380px]:text-3xl sm:text-5xl">{stat.value}</p>
+                  <p className="font-display text-2xl text-gold-300 min-[380px]:text-3xl sm:text-5xl">
+                    {stat.value}
+                  </p>
                   <p className="mt-2 text-[0.62rem] uppercase leading-4 tracking-editorial text-mist/70">
                     {stat.label}
                   </p>

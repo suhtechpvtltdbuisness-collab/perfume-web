@@ -55,10 +55,26 @@ export const defaultLandingContent: LandingContent = {
   ingredientsDescription:
     "We work with growers, distillers and extractors whose materials have character before they enter a formula.",
   ingredients: [
-    { name: "Oud Assafi", description: "A dark, resinous material aged for decades before extraction." },
-    { name: "Iris Pallida", description: "Cultivated in Florence and rested for six years for its buttery depth." },
-    { name: "Rose Centifolia", description: "Hand-picked at dawn in Grasse, when its aroma is most vivid." },
-    { name: "Sandalwood", description: "Creamy, meditative and sourced through regenerative plantations." },
+    {
+      name: "Oud Assafi",
+      description:
+        "A dark, resinous material aged for decades before extraction.",
+    },
+    {
+      name: "Iris Pallida",
+      description:
+        "Cultivated in Florence and rested for six years for its buttery depth.",
+    },
+    {
+      name: "Rose Centifolia",
+      description:
+        "Hand-picked at dawn in Grasse, when its aroma is most vivid.",
+    },
+    {
+      name: "Sandalwood",
+      description:
+        "Creamy, meditative and sourced through regenerative plantations.",
+    },
   ],
 
   experienceEyebrow: "Private consultation",
@@ -69,9 +85,21 @@ export const defaultLandingContent: LandingContent = {
   experienceCtaHref: "/contact",
 
   testimonials: [
-    { quote: "Nocturne Oud feels less like fragrance and more like a beautifully kept secret.", author: "Verified client" },
-    { quote: "The packaging, service and scent are considered down to the smallest detail.", author: "Verified client" },
-    { quote: "Lumière Rose changes through the day and somehow becomes more personal.", author: "Verified client" },
+    {
+      quote:
+        "Nocturne Oud feels less like fragrance and more like a beautifully kept secret.",
+      author: "Verified client",
+    },
+    {
+      quote:
+        "The packaging, service and scent are considered down to the smallest detail.",
+      author: "Verified client",
+    },
+    {
+      quote:
+        "Lumière Rose changes through the day and somehow becomes more personal.",
+      author: "Verified client",
+    },
   ],
 
   newsletterEyebrow: "The private list",
