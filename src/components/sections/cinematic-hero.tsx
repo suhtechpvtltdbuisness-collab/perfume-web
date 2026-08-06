@@ -50,8 +50,8 @@ export function CinematicHero() {
         <div className="absolute inset-0 bg-transparent"><PerfumeBottleCanvas progress={progress} /></div>
 
         <Container className="pointer-events-none relative z-10 h-full">
-          <div ref={intro} className="absolute inset-x-5 top-[max(6rem,15%)] text-center sm:inset-x-8 sm:top-[max(7rem,14%)] lg:top-[max(7rem,12%)]">
-            <p className="mb-5 text-[0.68rem] uppercase tracking-[0.46em] text-gold-300/95">{landing.heroEyebrow}</p>
+          <div ref={intro} className="absolute inset-x-5 top-[15%] text-center sm:inset-x-8 sm:top-[14%] lg:top-[12%]">
+            <p className="mb-5 mt-[max(0px,6rem_-_15vh)] text-[0.68rem] uppercase tracking-[0.46em] text-gold-300/95 sm:mt-[max(0px,7rem_-_14vh)] lg:mt-[max(0px,7rem_-_12vh)]">{landing.heroEyebrow}</p>
             <h1 className="mx-auto max-w-5xl text-balance font-display text-[13.5vw] leading-[0.84] tracking-[-0.045em] text-ivory sm:text-[6rem] lg:text-[7rem] xl:text-[7.5rem]">
               {landing.heroTitleLead}
               <span className="flex flex-wrap justify-center gap-x-[0.3em] italic text-gold-300">
