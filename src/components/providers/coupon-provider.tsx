@@ -80,28 +80,34 @@ export function CouponProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastState | null>(null);
 
   useEffect(() => {
-    setAppliedCode(safeRead<string | null>(appliedStorageKey, null));
-    setRedeemedCodes(safeRead<string[]>(redeemedStorageKey, []));
+    const hydrate = window.setTimeout(() => {
+      setAppliedCode(safeRead<string | null>(appliedStorageKey, null));
+      setRedeemedCodes(safeRead<string[]>(redeemedStorageKey, []));
+    }, 0);
+    return () => window.clearTimeout(hydrate);
   }, []);
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    void couponApi
-      .list(accessToken)
-      .then((list) => {
-        if (!active) return;
-        setCoupons(list);
-      })
-      .catch(() => {
-        if (!active) return;
-        setCoupons([]);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
+    const load = window.setTimeout(() => {
+      setLoading(true);
+      void couponApi
+        .list(accessToken)
+        .then((list) => {
+          if (!active) return;
+          setCoupons(list);
+        })
+        .catch(() => {
+          if (!active) return;
+          setCoupons([]);
+        })
+        .finally(() => {
+          if (active) setLoading(false);
+        });
+    }, 0);
     return () => {
       active = false;
+      window.clearTimeout(load);
     };
   }, [accessToken]);
 
