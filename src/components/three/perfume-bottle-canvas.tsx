@@ -1,7 +1,12 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { ContactShadows, Environment, Float } from "@react-three/drei";
+import {
+  ContactShadows,
+  Environment,
+  Float,
+  useTexture,
+} from "@react-three/drei";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import {
   AdditiveBlending,
@@ -11,9 +16,22 @@ import {
   MathUtils,
   Points,
   PointsMaterial,
+  SRGBColorSpace,
+  Vector2,
   type BufferGeometry,
 } from "three";
 import { Suspense, useMemo, useRef, type MutableRefObject } from "react";
+
+const bottleProfile = [
+  new Vector2(0, -1.22),
+  new Vector2(0.61, -1.22),
+  new Vector2(0.68, -1.17),
+  new Vector2(0.72, -1.06),
+  new Vector2(0.72, 1.05),
+  new Vector2(0.7, 1.16),
+  new Vector2(0.64, 1.23),
+  new Vector2(0, 1.23),
+];
 
 function Mist({ progress }: { progress: MutableRefObject<number> }) {
   const points = useRef<Points<BufferGeometry, PointsMaterial>>(null);
@@ -41,7 +59,7 @@ function Mist({ progress }: { progress: MutableRefObject<number> }) {
   });
 
   return (
-    <points ref={points} position={[0.48, 1.5, 0]}>
+    <points ref={points} position={[0.48, 1.87, 0]}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
@@ -71,9 +89,9 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
       MathUtils.smoothstep(value, 0.29, 0.34) -
       MathUtils.smoothstep(value, 0.38, 0.44);
 
-    cap.current.position.y = MathUtils.lerp(1.76, 2.96, capLift);
+    cap.current.position.y = MathUtils.lerp(1.81, 3.01, capLift);
     cap.current.rotation.z = capLift * 0.22;
-    atomizer.current.position.y = 1.48 - press * 0.12;
+    atomizer.current.position.y = 1.85 - press * 0.12;
     bottle.current.rotation.y =
       clock.elapsedTime * 0.16 + value * Math.PI * 1.25 + pointer.x * 0.12;
     bottle.current.rotation.x = pointer.y * 0.06;
@@ -89,29 +107,23 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
   return (
     <group ref={bottle}>
       <mesh position={[0, -0.34, 0]} castShadow>
-        <cylinderGeometry args={[0.72, 0.72, 2.42, 64]} />
+        <latheGeometry args={[bottleProfile, 64]} />
         <meshPhysicalMaterial
           color="#7D959F"
-          transmission={0.08}
+          emissive="#26343a"
+          emissiveIntensity={0.18}
+          transmission={0}
           thickness={1.1}
-          roughness={0.34}
+          roughness={0.4}
           metalness={0.02}
           ior={1.52}
           clearcoat={0.58}
           clearcoatRoughness={0.18}
         />
       </mesh>
-      <mesh position={[0, -1.54, 0]}>
-        <cylinderGeometry args={[0.7, 0.7, 0.08, 64]} />
-        <meshPhysicalMaterial
-          color="#7D959F"
-          roughness={0.24}
-          clearcoat={0.8}
-        />
-      </mesh>
       <BottleLabels />
-      <mesh position={[0, 0.96, 0]}>
-        <cylinderGeometry args={[0.67, 0.67, 0.26, 64]} />
+      <mesh position={[0, 1.1, 0]}>
+        <cylinderGeometry args={[0.67, 0.67, 0.42, 64]} />
         <meshPhysicalMaterial
           color="#0a0b0d"
           metalness={0.48}
@@ -119,8 +131,8 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
           clearcoat={1}
         />
       </mesh>
-      <mesh position={[0, 1.15, 0]}>
-        <cylinderGeometry args={[0.42, 0.48, 0.24, 48]} />
+      <mesh position={[0, 1.42, 0]}>
+        <cylinderGeometry args={[0.3, 0.38, 0.34, 48]} />
         <meshPhysicalMaterial
           color="#090a0c"
           metalness={0.58}
@@ -128,9 +140,9 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
           clearcoat={1}
         />
       </mesh>
-      <group ref={atomizer} position={[0, 1.48, 0]}>
-        <mesh position={[0, -0.18, 0]}>
-          <cylinderGeometry args={[0.25, 0.25, 0.36, 40]} />
+      <group ref={atomizer} position={[0, 1.85, 0]}>
+        <mesh position={[0, -0.19, 0]}>
+          <cylinderGeometry args={[0.25, 0.25, 0.38, 40]} />
           <meshStandardMaterial
             color="#07080a"
             metalness={0.62}
@@ -155,9 +167,9 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
           />
         </mesh>
       </group>
-      <group ref={cap} position={[0, 1.76, 0]}>
+      <group ref={cap} position={[0, 1.81, 0]}>
         <mesh castShadow>
-          <cylinderGeometry args={[0.54, 0.54, 0.94, 64, 1, true]} />
+          <cylinderGeometry args={[0.66, 0.66, 1, 64, 1, true]} />
           <meshPhysicalMaterial
             color="#b9c8ee"
             transmission={0.82}
@@ -170,8 +182,8 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
             clearcoat={1}
           />
         </mesh>
-        <mesh position={[0, 0.47, 0]}>
-          <cylinderGeometry args={[0.54, 0.54, 0.045, 64]} />
+        <mesh position={[0, 0.5, 0]}>
+          <cylinderGeometry args={[0.66, 0.66, 0.045, 64]} />
           <meshPhysicalMaterial
             color="#c5d0ed"
             transmission={0.8}
@@ -194,9 +206,9 @@ function createBottleLabel(side: "front" | "back") {
   if (!context) return null;
 
   const gradient = context.createLinearGradient(0, 0, 720, 920);
-  gradient.addColorStop(0, "#101824");
-  gradient.addColorStop(0.5, "#070b13");
-  gradient.addColorStop(1, "#111824");
+  gradient.addColorStop(0, "#03091b");
+  gradient.addColorStop(0.5, "#010615");
+  gradient.addColorStop(1, "#050b1d");
   context.fillStyle = gradient;
   context.fillRect(0, 0, 720, 920);
   context.strokeStyle = "#125bcc";
@@ -216,24 +228,38 @@ function createBottleLabel(side: "front" | "back") {
   context.textAlign = "center";
 
   if (side === "front") {
+    // Autoroma car mark: compact nose, arched roof and tapered rear.
     context.strokeStyle = "#edf2ff";
-    context.lineWidth = 10;
+    context.lineWidth = 9;
+    context.lineCap = "round";
+    context.lineJoin = "round";
     context.beginPath();
-    context.moveTo(145, 302);
-    context.bezierCurveTo(230, 222, 365, 216, 455, 275);
-    context.bezierCurveTo(505, 307, 555, 318, 592, 300);
+    context.moveTo(112, 320);
+    context.bezierCurveTo(132, 277, 171, 255, 222, 250);
+    context.bezierCurveTo(298, 174, 431, 167, 526, 241);
+    context.bezierCurveTo(558, 266, 594, 283, 625, 280);
     context.stroke();
+
+    context.beginPath();
+    context.moveTo(112, 320);
+    context.bezierCurveTo(145, 294, 180, 281, 220, 279);
+    context.stroke();
+
     context.strokeStyle = "#1b6ef3";
-    context.lineWidth = 7;
+    context.lineWidth = 8;
     context.beginPath();
-    context.moveTo(148, 318);
-    context.bezierCurveTo(280, 282, 410, 342, 585, 306);
+    context.moveTo(129, 326);
+    context.bezierCurveTo(275, 288, 443, 349, 624, 282);
     context.stroke();
-    context.font = "600 66px Arial";
-    context.fillText("AUTOROMA", 360, 430);
+
+    context.fillStyle = "#f3f4f7";
+    context.font = '600 61px "Arial Rounded MT Bold", Arial';
+    drawSpacedText(context, "AUTOROMA", 360, 430, 5);
+    context.font = "22px Arial";
+    context.fillText("®", 618, 382);
     context.fillStyle = "#226de2";
-    context.font = "24px Arial";
-    context.fillText("PRESTIGE SCENTED RIDES", 360, 478);
+    context.font = "600 22px Arial";
+    drawSpacedText(context, "PRESTIGE SCENTED RIDES", 360, 480, 3);
     context.fillStyle = "#f0f0f1";
     context.font = "bold 46px Georgia";
     context.fillText("MODISH SEDUCTION", 360, 575);
@@ -263,40 +289,65 @@ function createBottleLabel(side: "front" | "back") {
   }
 
   const canvasTexture = new CanvasTexture(canvas);
+  canvasTexture.colorSpace = SRGBColorSpace;
   canvasTexture.minFilter = LinearFilter;
   canvasTexture.magFilter = LinearFilter;
   canvasTexture.anisotropy = 4;
   return canvasTexture;
 }
 
+function drawSpacedText(
+  context: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  y: number,
+  spacing: number,
+) {
+  const widths = [...text].map(
+    (character) => context.measureText(character).width,
+  );
+  const totalWidth =
+    widths.reduce((total, width) => total + width, 0) +
+    spacing * (text.length - 1);
+  let x = centerX - totalWidth / 2;
+  const originalAlignment = context.textAlign;
+  context.textAlign = "left";
+  [...text].forEach((character, index) => {
+    context.fillText(character, x, y);
+    x += widths[index] + spacing;
+  });
+  context.textAlign = originalAlignment;
+}
+
 function BottleLabels() {
-  const frontTexture = useMemo(() => createBottleLabel("front"), []);
+  const loadedFrontTexture = useTexture("/images/modish-seduction-label.png");
+  const frontTexture = useMemo(() => {
+    const texture = loadedFrontTexture.clone();
+    texture.colorSpace = SRGBColorSpace;
+    texture.minFilter = LinearFilter;
+    texture.magFilter = LinearFilter;
+    texture.anisotropy = 8;
+    texture.needsUpdate = true;
+    return texture;
+  }, [loadedFrontTexture]);
   const backTexture = useMemo(() => createBottleLabel("back"), []);
 
   return (
-    <group position={[0, -0.36, 0]}>
+    <group position={[0, -0.29, 0]}>
       {frontTexture && (
         <mesh rotation={[0, 0, 0]}>
           <cylinderGeometry
-            args={[0.726, 0.726, 1.72, 64, 1, true, -Math.PI / 2, Math.PI]}
+            args={[0.724, 0.724, 1.9, 64, 1, true, -Math.PI / 2, Math.PI]}
           />
-          <meshStandardMaterial
-            map={frontTexture}
-            roughness={0.38}
-            metalness={0.08}
-          />
+          <meshBasicMaterial map={frontTexture} />
         </mesh>
       )}
       {backTexture && (
         <mesh>
           <cylinderGeometry
-            args={[0.726, 0.726, 1.72, 64, 1, true, Math.PI / 2, Math.PI]}
+            args={[0.724, 0.724, 1.9, 64, 1, true, Math.PI / 2, Math.PI]}
           />
-          <meshStandardMaterial
-            map={backTexture}
-            roughness={0.38}
-            metalness={0.08}
-          />
+          <meshBasicMaterial map={backTexture} />
         </mesh>
       )}
     </group>
@@ -330,10 +381,10 @@ function Scene({ progress }: { progress: MutableRefObject<number> }) {
       />
       <pointLight position={[0, -2.4, 2]} intensity={22} color="#d49a42" />
       <pointLight position={[2.8, 0, -2]} intensity={14} color="#6f87a2" />
-      <Float speed={1.2} rotationIntensity={0.08} floatIntensity={0.12}>
-        <Bottle progress={progress} />
-      </Float>
       <Suspense fallback={null}>
+        <Float speed={1.2} rotationIntensity={0.08} floatIntensity={0.12}>
+          <Bottle progress={progress} />
+        </Float>
         <Environment preset="warehouse" />
       </Suspense>
       <ContactShadows
