@@ -20,11 +20,25 @@ export default function ContactPage() {
           <div className="mt-12 grid gap-8 border-t border-white/10 pt-8 sm:grid-cols-2">
             <div>
               <p className="text-[0.6rem] uppercase tracking-luxury text-gold-400">Email</p>
-              <p className="mt-3 text-sm text-mist/85">care@autoroma.com</p>
+              <a href="mailto:care@autoroma.com" className="mt-3 inline-block text-sm text-mist/85 transition hover:text-gold-300">
+                care@autoroma.com
+              </a>
             </div>
             <div>
               <p className="text-[0.6rem] uppercase tracking-luxury text-gold-400">Hours</p>
               <p className="mt-3 text-sm leading-6 text-mist/85">Mon–Sat<br />10:00–19:00 IST</p>
+            </div>
+            <div>
+              <p className="text-[0.6rem] uppercase tracking-luxury text-gold-400">Address</p>
+              <address className="mt-3 text-sm not-italic leading-6 text-mist/85">
+                Noida 201301, India
+              </address>
+            </div>
+            <div>
+              <p className="text-[0.6rem] uppercase tracking-luxury text-gold-400">Phone</p>
+              <a href="tel:+917061261991" className="mt-3 inline-block text-sm text-mist/85 transition hover:text-gold-300">
+                +91 70612 61991
+              </a>
             </div>
           </div>
         </div>
