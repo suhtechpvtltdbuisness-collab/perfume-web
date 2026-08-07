@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Check } from "lucide-react";
 
 import type { Product } from "@/types/product";
@@ -19,7 +20,7 @@ export function AddToCartButton({
 
   useEffect(() => {
     if (!added) return;
-    const timer = window.setTimeout(() => setAdded(false), 1600);
+    const timer = window.setTimeout(() => setAdded(false), 3500);
     return () => window.clearTimeout(timer);
   }, [added]);
 
@@ -61,18 +62,24 @@ function CartToast({ productName, visible }: { productName: string; visible: boo
     <div
       role="status"
       aria-live="polite"
-      className={`pointer-events-none fixed bottom-5 left-1/2 z-[180] w-[calc(100%-2.5rem)] max-w-sm -translate-x-1/2 transition-all duration-500 sm:bottom-8 sm:left-auto sm:right-8 sm:w-auto sm:min-w-80 sm:translate-x-0 ${
+      className={`fixed bottom-5 left-1/2 z-[180] w-[calc(100%-2.5rem)] max-w-sm -translate-x-1/2 transition-all duration-500 sm:bottom-8 sm:left-auto sm:right-8 sm:w-auto sm:min-w-96 sm:translate-x-0 ${
         visible ? "translate-y-0 opacity-100" : "invisible translate-y-4 opacity-0"
       }`}
     >
-      <div className="flex items-center gap-4 rounded-xl border border-gold-300/30 bg-obsidian/95 px-5 py-4 shadow-[0_20px_70px_rgba(0,0,0,0.65)] backdrop-blur-xl">
+      <div className="flex items-center gap-3 rounded-xl border border-gold-300/30 bg-obsidian/95 px-4 py-3.5 shadow-[0_20px_70px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:gap-4 sm:px-5 sm:py-4">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gold-300 text-ink">
           <Check className="size-4" />
         </span>
-        <span className="min-w-0">
+        <span className="min-w-0 flex-1">
           <span className="block truncate font-display text-lg text-ivory">{productName}</span>
           <span className="mt-0.5 block text-[0.6rem] uppercase tracking-luxury text-gold-300/90">Added to your bag</span>
         </span>
+        <Link
+          href="/cart"
+          className="shrink-0 rounded-full border border-gold-300/40 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-gold-300 outline-none transition-colors hover:bg-gold-300 hover:text-ink focus-visible:ring-1 focus-visible:ring-gold-300"
+        >
+          View bag
+        </Link>
       </div>
     </div>
   );

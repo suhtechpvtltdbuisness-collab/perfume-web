@@ -80,7 +80,22 @@ export function Navbar() {
           </ul>
         </nav>
 
-        <MenuButton isOpen={isOpen} onClick={() => setIsOpen((value) => !value)} />
+        <div className="flex items-center gap-2 xl:hidden">
+          <Link
+            href="/cart"
+            onClick={closeMenu}
+            aria-label={`Open shopping bag with ${itemCount} ${itemCount === 1 ? "item" : "items"}`}
+            className="group relative flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-ivory outline-none transition-colors duration-500 hover:border-gold-400/40 hover:text-gold-300 focus-visible:ring-1 focus-visible:ring-gold-400"
+          >
+            <ShoppingBag className="size-[1.15rem] stroke-[1.5]" aria-hidden="true" />
+            {itemCount > 0 && (
+              <span className="absolute -right-0.5 -top-1 flex min-w-5 items-center justify-center rounded-full bg-gold-300 px-1 text-[0.62rem] font-bold leading-5 text-ink shadow-[0_0_0_3px_rgba(10,9,8,0.9)]">
+                {itemCount > 99 ? "99+" : itemCount}
+              </span>
+            )}
+          </Link>
+          <MenuButton isOpen={isOpen} onClick={() => setIsOpen((value) => !value)} />
+        </div>
       </Container>
 
       <div
