@@ -59,7 +59,13 @@ export function Footer() {
       </Container>
       <Container className="flex flex-col gap-4 border-t border-white/15 py-7 text-xs font-medium uppercase tracking-luxury text-ivory/75 sm:flex-row sm:justify-between">
         <p>© 2026 Autoroma</p>
-        <p>Privacy · Terms · India</p>
+        <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <Link href="/privacy" className="transition hover:text-gold-300">Privacy</Link>
+          <span aria-hidden="true">·</span>
+          <Link href="/terms" className="transition hover:text-gold-300">Terms</Link>
+          <span aria-hidden="true">·</span>
+          <span>India</span>
+        </nav>
       </Container>
     </footer>
   );

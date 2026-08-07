@@ -28,7 +28,7 @@ const FAMILIES = [
   "Marine · Fresh",
 ] as const;
 
-const SIZES = ["30 ml", "50 ml", "75 ml", "100 ml"] as const;
+const SIZES = ["10 ml", "30 ml", "50 ml", "75 ml", "100 ml"] as const;
 
 const ACCENTS = [
   { label: "Oud amber", value: "bg-[#8b5a3c]" },
