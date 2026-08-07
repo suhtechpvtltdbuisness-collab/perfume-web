@@ -20,7 +20,7 @@ import {
   Vector2,
   type BufferGeometry,
 } from "three";
-import { Suspense, useMemo, useRef, type MutableRefObject } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 
 const bottleProfile = [
   new Vector2(0, -1.22),
@@ -33,12 +33,13 @@ const bottleProfile = [
   new Vector2(0, 1.23),
 ];
 
-function Mist({ progress }: { progress: MutableRefObject<number> }) {
+function Mist({ progress, lightweight }: { progress: MutableRefObject<number>; lightweight: boolean }) {
   const points = useRef<Points<BufferGeometry, PointsMaterial>>(null);
   const positions = useMemo(() => {
-    const data = new Float32Array(1400 * 3);
-    for (let index = 0; index < 1400; index += 1) {
-      const distance = Math.pow(index / 1400, 0.62) * 5.8;
+    const pointCount = lightweight ? 420 : 1000;
+    const data = new Float32Array(pointCount * 3);
+    for (let index = 0; index < pointCount; index += 1) {
+      const distance = Math.pow(index / pointCount, 0.62) * 5.8;
       const angle = index * 2.399;
       const spread = 0.06 + distance * 0.34;
       data[index * 3] = Math.cos(angle) * spread + distance;
@@ -46,7 +47,7 @@ function Mist({ progress }: { progress: MutableRefObject<number> }) {
       data[index * 3 + 2] = Math.sin(angle) * spread;
     }
     return data;
-  }, []);
+  }, [lightweight]);
 
   useFrame(({ clock }) => {
     if (!points.current) return;
@@ -76,7 +77,7 @@ function Mist({ progress }: { progress: MutableRefObject<number> }) {
   );
 }
 
-function Bottle({ progress }: { progress: MutableRefObject<number> }) {
+function Bottle({ progress, lightweight }: { progress: MutableRefObject<number>; lightweight: boolean }) {
   const bottle = useRef<Group>(null);
   const cap = useRef<Group>(null);
   const atomizer = useRef<Group>(null);
@@ -193,7 +194,7 @@ function Bottle({ progress }: { progress: MutableRefObject<number> }) {
           />
         </mesh>
       </group>
-      <Mist progress={progress} />
+      <Mist progress={progress} lightweight={lightweight} />
     </group>
   );
 }
@@ -354,7 +355,7 @@ function BottleLabels() {
   );
 }
 
-function Scene({ progress }: { progress: MutableRefObject<number> }) {
+function Scene({ progress, lightweight }: { progress: MutableRefObject<number>; lightweight: boolean }) {
   useFrame(({ camera }) => {
     camera.position.z = MathUtils.lerp(8.2, 6.3, progress.current);
     camera.position.x = MathUtils.lerp(0, 0.45, progress.current);
@@ -370,7 +371,7 @@ function Scene({ progress }: { progress: MutableRefObject<number> }) {
         color="#ffe3aa"
         angle={0.32}
         penumbra={1}
-        castShadow
+        castShadow={!lightweight}
       />
       <spotLight
         position={[-4, 2, 4]}
@@ -382,23 +383,27 @@ function Scene({ progress }: { progress: MutableRefObject<number> }) {
       <pointLight position={[0, -2.4, 2]} intensity={22} color="#d49a42" />
       <pointLight position={[2.8, 0, -2]} intensity={14} color="#6f87a2" />
       <Suspense fallback={null}>
-        <Float speed={1.2} rotationIntensity={0.08} floatIntensity={0.12}>
-          <Bottle progress={progress} />
+        <Float speed={lightweight ? 0.7 : 1.2} rotationIntensity={0.08} floatIntensity={0.12}>
+          <Bottle progress={progress} lightweight={lightweight} />
         </Float>
-        <Environment preset="warehouse" />
+        {!lightweight && <Environment preset="warehouse" />}
       </Suspense>
-      <ContactShadows
-        position={[0, -2.72, 0]}
-        opacity={0.34}
-        scale={5.5}
-        blur={3}
-        far={4}
-        color="#4b351e"
-      />
-      <EffectComposer>
-        <Bloom luminanceThreshold={0.68} intensity={1.2} mipmapBlur />
-        <Vignette eskil={false} offset={0.12} darkness={0.78} />
-      </EffectComposer>
+      {!lightweight && (
+        <>
+          <ContactShadows
+            position={[0, -2.72, 0]}
+            opacity={0.34}
+            scale={5.5}
+            blur={3}
+            far={4}
+            color="#4b351e"
+          />
+          <EffectComposer multisampling={0}>
+            <Bloom luminanceThreshold={0.68} intensity={1.05} mipmapBlur />
+            <Vignette eskil={false} offset={0.12} darkness={0.78} />
+          </EffectComposer>
+        </>
+      )}
     </>
   );
 }
@@ -408,17 +413,27 @@ export function PerfumeBottleCanvas({
 }: {
   progress: MutableRefObject<number>;
 }) {
+  const [lightweight, setLightweight] = useState(true);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)");
+    const updateMode = () => setLightweight(query.matches);
+    updateMode();
+    query.addEventListener("change", updateMode);
+    return () => query.removeEventListener("change", updateMode);
+  }, []);
+
   return (
     <Canvas
       camera={{ position: [0, 0, 8.2], fov: 38 }}
-      dpr={[1, 1.6]}
-      shadows
+      dpr={lightweight ? 1 : [1, 1.35]}
+      shadows={!lightweight}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.setClearColor("#000000", 0);
       }}
     >
-      <Scene progress={progress} />
+      <Scene progress={progress} lightweight={lightweight} />
     </Canvas>
   );
 }

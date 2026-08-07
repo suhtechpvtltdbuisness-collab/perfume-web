@@ -50,7 +50,7 @@ export function CinematicHero() {
         })
         .to(
           intro.current,
-          { opacity: 0, y: -70, filter: "blur(10px)", duration: 0.14 },
+          { opacity: 0, y: -50, duration: 0.14 },
           0.08,
         )
         .fromTo(

@@ -10,8 +10,11 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canUseSmoothScroll =
+      !reduced &&
+      window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches;
     const timer = window.setTimeout(() => setLoading(false), reduced ? 50 : 1500);
-    if (reduced) return () => window.clearTimeout(timer);
+    if (!canUseSmoothScroll) return () => window.clearTimeout(timer);
 
     const lenis = new Lenis({
       duration: 1.15,
@@ -25,11 +28,17 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
       lenis.raf(time);
       frame = window.requestAnimationFrame(raf);
     };
-    frame = window.requestAnimationFrame(raf);
+    const updateAnimation = () => {
+      window.cancelAnimationFrame(frame);
+      if (!document.hidden) frame = window.requestAnimationFrame(raf);
+    };
+    updateAnimation();
+    document.addEventListener("visibilitychange", updateAnimation);
 
     return () => {
       window.clearTimeout(timer);
       window.cancelAnimationFrame(frame);
+      document.removeEventListener("visibilitychange", updateAnimation);
       lenis.destroy();
     };
   }, []);
