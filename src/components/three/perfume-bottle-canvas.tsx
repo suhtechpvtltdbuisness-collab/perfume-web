@@ -38,7 +38,7 @@ function Mist({ progress, lightweight }: { progress: MutableRefObject<number>; l
     const pointCount = lightweight ? 420 : 1000;
     const data = new Float32Array(pointCount * 3);
     for (let index = 0; index < pointCount; index += 1) {
-      const distance = Math.pow(index / pointCount, 0.62) * 5.8;
+      const distance = Math.pow(index / pointCount, 1.18) * 4.8;
       const angle = index * 2.399;
       const spread = 0.06 + distance * 0.34;
       data[index * 3] = Math.cos(angle) * spread + distance;
@@ -53,19 +53,19 @@ function Mist({ progress, lightweight }: { progress: MutableRefObject<number>; l
     const spray =
       MathUtils.smoothstep(progress.current, 0.2, 0.42) *
       (1 - MathUtils.smoothstep(progress.current, 0.58, 0.78));
-    points.current.material.opacity = spray * 0.8;
+    points.current.material.opacity = spray;
     points.current.scale.setScalar(0.15 + spray * 1.05);
     points.current.rotation.x = Math.sin(clock.elapsedTime * 0.25) * 0.08;
   });
 
   return (
-    <points ref={points} position={[0.48, 1.87, 0]}>
+    <points ref={points} position={[0.48, 1.87, 0.18]}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        color="#f4dca2"
-        size={0.025}
+        color="#fff3c7"
+        size={0.028}
         transparent
         opacity={0}
         depthWrite={false}
@@ -88,7 +88,6 @@ function Bottle({ progress, lightweight }: { progress: MutableRefObject<number>;
     const press =
       MathUtils.smoothstep(value, 0.29, 0.34) -
       MathUtils.smoothstep(value, 0.38, 0.44);
-
     cap.current.position.y = MathUtils.lerp(1.81, 3.01, capLift);
     cap.current.rotation.z = capLift * 0.22;
     atomizer.current.position.y = 1.85 - press * 0.12;
