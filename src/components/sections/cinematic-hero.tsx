@@ -76,6 +76,11 @@ export function CinematicHero() {
       className="relative h-[270vh] bg-black sm:h-[310vh] lg:h-[340vh]"
     >
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[url('/images/hero-feather-pattern.svg')] bg-[length:94px_86px] opacity-[0.38] sm:bg-[length:118px_108px] lg:bg-[length:141px_129px]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-black/55" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(181,132,60,0.16),transparent_42%)]" />
         <div className="absolute inset-0 bg-transparent">
           <PerfumeBottleCanvas progress={progress} />
