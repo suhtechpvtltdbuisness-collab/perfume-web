@@ -7,7 +7,6 @@ import {
   Float,
   useTexture,
 } from "@react-three/drei";
-import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import {
   AdditiveBlending,
   CanvasTexture,
@@ -389,20 +388,14 @@ function Scene({ progress, lightweight }: { progress: MutableRefObject<number>; 
         {!lightweight && <Environment preset="warehouse" />}
       </Suspense>
       {!lightweight && (
-        <>
-          <ContactShadows
-            position={[0, -2.72, 0]}
-            opacity={0.34}
-            scale={5.5}
-            blur={3}
-            far={4}
-            color="#4b351e"
-          />
-          <EffectComposer multisampling={0}>
-            <Bloom luminanceThreshold={0.68} intensity={1.05} mipmapBlur />
-            <Vignette eskil={false} offset={0.12} darkness={0.78} />
-          </EffectComposer>
-        </>
+        <ContactShadows
+          position={[0, -2.72, 0]}
+          opacity={0.34}
+          scale={5.5}
+          blur={3}
+          far={4}
+          color="#4b351e"
+        />
       )}
     </>
   );
