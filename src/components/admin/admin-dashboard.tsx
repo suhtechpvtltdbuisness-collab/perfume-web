@@ -2,9 +2,10 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, LogOut, Package, Pencil, Plus, RotateCcw, TicketPercent, Trash2 } from "lucide-react";
+import { LayoutDashboard, LogOut, Package, Pencil, Plus, Receipt, RotateCcw, TicketPercent, Trash2 } from "lucide-react";
 
 import { CouponAdminView } from "@/components/admin/coupon-admin-view";
+import { OrderAdminView } from "@/components/admin/order-admin-view";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useCoupons } from "@/components/providers/coupon-provider";
 import { useSiteContent } from "@/components/providers/site-content-provider";
@@ -15,7 +16,7 @@ import type { Product } from "@/types/product";
 import type { LandingContent, LandingListKey, LandingTextKey } from "@/types/site-content";
 import { PerfumeFormModal } from "@/components/admin/perfume-form-modal";
 
-type AdminView = "overview" | "landing" | "products" | "coupons";
+type AdminView = "overview" | "landing" | "products" | "coupons" | "orders";
 
 const emptyProduct: Product = {
   id: "",
@@ -79,6 +80,7 @@ export function AdminDashboard() {
             <AdminNav active={view === "landing"} onClick={() => setView("landing")} icon={<Pencil className="size-4" />}>Landing page</AdminNav>
             <AdminNav active={view === "products"} onClick={() => setView("products")} icon={<Package className="size-4" />}>Products</AdminNav>
             <AdminNav active={view === "coupons"} onClick={() => setView("coupons")} icon={<TicketPercent className="size-4" />}>Coupons</AdminNav>
+            <AdminNav active={view === "orders"} onClick={() => setView("orders")} icon={<Receipt className="size-4" />}>Orders</AdminNav>
           </nav>
           <button onClick={() => void logout()} className="mt-6 flex items-center gap-3 text-[0.62rem] uppercase tracking-editorial text-ivory hover:text-ivory lg:mt-12">
             <LogOut className="size-4" /> Sign out
@@ -154,6 +156,8 @@ export function AdminDashboard() {
           )}
 
           {view === "coupons" && <CouponAdminView products={content.products} />}
+
+          {view === "orders" && <OrderAdminView />}
         </main>
       </div>
 

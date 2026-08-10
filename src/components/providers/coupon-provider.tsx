@@ -49,7 +49,7 @@ interface CouponContextValue {
     override?: CouponContextInput,
   ) => CouponValidationResult;
   removeCoupon: () => void;
-  completeCouponRedemption: () => Promise<void>;
+  completeCouponRedemption: (skipRemoteRedeem?: boolean) => Promise<void>;
   couponsForProduct: (productId: string, category?: string) => Coupon[];
   notify: (message: string, type?: "success" | "error") => void;
 }
@@ -266,30 +266,47 @@ export function CouponProvider({ children }: { children: ReactNode }) {
     [accessToken, coupons, notify],
   );
 
-  const completeCouponRedemption = useCallback(async () => {
-    if (!appliedCoupon) return;
-    const next = [...new Set([...redeemedCodes, appliedCoupon.code])];
-    setRedeemedCodes(next);
-    window.localStorage.setItem(redeemedStorageKey, JSON.stringify(next));
-    try {
-      const redeemed = await couponApi.redeem(appliedCoupon.code);
-      setCoupons((current) =>
-        current.map((coupon) =>
-          coupon.id === redeemed.id ? redeemed : coupon,
-        ),
-      );
-    } catch {
-      setCoupons((current) =>
-        current.map((coupon) =>
-          coupon.id === appliedCoupon.id
-            ? { ...coupon, usedCount: coupon.usedCount + 1 }
-            : coupon,
-        ),
-      );
-    }
-    setAppliedCode(null);
-    setSelectedCoupon(null);
-  }, [appliedCoupon, redeemedCodes]);
+  const bumpUsedCountLocally = useCallback((id: string) => {
+    setCoupons((current) =>
+      current.map((coupon) =>
+        coupon.id === id
+          ? { ...coupon, usedCount: coupon.usedCount + 1 }
+          : coupon,
+      ),
+    );
+  }, []);
+
+  /**
+   * Paid orders already increment `usedCount` server-side during payment
+   * verification, so those callers pass `skipRemoteRedeem`.
+   */
+  const completeCouponRedemption = useCallback(
+    async (skipRemoteRedeem = false) => {
+      if (!appliedCoupon) return;
+      const next = [...new Set([...redeemedCodes, appliedCoupon.code])];
+      setRedeemedCodes(next);
+      window.localStorage.setItem(redeemedStorageKey, JSON.stringify(next));
+
+      if (skipRemoteRedeem) {
+        bumpUsedCountLocally(appliedCoupon.id);
+      } else {
+        try {
+          const redeemed = await couponApi.redeem(appliedCoupon.code);
+          setCoupons((current) =>
+            current.map((coupon) =>
+              coupon.id === redeemed.id ? redeemed : coupon,
+            ),
+          );
+        } catch {
+          bumpUsedCountLocally(appliedCoupon.id);
+        }
+      }
+
+      setAppliedCode(null);
+      setSelectedCoupon(null);
+    },
+    [appliedCoupon, bumpUsedCountLocally, redeemedCodes],
+  );
 
   const value = useMemo<CouponContextValue>(
     () => ({
