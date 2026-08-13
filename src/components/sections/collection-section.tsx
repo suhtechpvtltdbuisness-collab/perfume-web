@@ -27,7 +27,7 @@ export function CollectionSection() {
             {landing.collectionEmptyMessage}
           </p>
         ) : (
-          <div className="mt-16 grid auto-rows-fr gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="mt-16 grid auto-rows-fr grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-6 sm:gap-y-14 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product, index) => (
               <Reveal key={product.id} delay={(index % 4) * 0.08} className="h-full">
                 <ProductCard product={product} />

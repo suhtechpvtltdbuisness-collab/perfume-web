@@ -21,16 +21,16 @@ export function ProductCard({ product }: { product: Product }) {
           <Plus className="size-4" />
         </span>
       </Link>
-      <div className="grid flex-1 grid-cols-[minmax(0,1fr)_auto] gap-4 border-b border-white/[0.08] pb-6 pt-5">
+      <div className="grid flex-1 grid-cols-1 gap-3 border-b border-white/[0.08] pb-5 pt-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-4 sm:pb-6 sm:pt-5">
         <div className="min-w-0">
-          <Link href={`/products/${product.slug}`} className="line-clamp-1 font-display text-2xl text-ivory transition-colors hover:text-gold-300 sm:text-3xl">
+          <Link href={`/products/${product.slug}`} className="line-clamp-1 font-display text-xl text-ivory transition-colors hover:text-gold-300 sm:text-3xl">
             {product.name}
           </Link>
           <p className="mt-2 line-clamp-1 text-[0.62rem] uppercase tracking-[0.18em] text-mist/75">
             {product.subtitle} · {product.size}
           </p>
         </div>
-        <div className="flex min-w-[5.5rem] flex-col items-end justify-between text-right">
+        <div className="flex min-w-0 items-center justify-between gap-2 sm:min-w-[5.5rem] sm:flex-col sm:items-end sm:text-right">
           <p className="whitespace-nowrap text-xs text-ivory/80">{formatPrice(product.price)}</p>
           <AddToCartButton product={product} compact />
         </div>

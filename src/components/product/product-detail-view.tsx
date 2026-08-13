@@ -52,7 +52,7 @@ export function ProductDetailView({ slug }: { slug: string }) {
       </Container>
       <Container className="max-w-[1480px] pt-20 sm:pt-24">
         <p className="text-[0.68rem] uppercase tracking-luxury text-gold-300">You may also like</p>
-        <div className="mt-8 grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid auto-rows-fr grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
           {products.filter((item) => item.id !== product.id).slice(0, 3).map((item) => <ProductCard key={item.id} product={item} />)}
         </div>
       </Container>

@@ -81,7 +81,7 @@ export function ShopGrid() {
           </Button>
         </div>
       ) : (
-        <div className="mt-10 grid auto-rows-fr gap-x-5 gap-y-12 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-7 xl:gap-y-16">
+        <div className="mt-10 grid auto-rows-fr grid-cols-2 gap-x-3 gap-y-10 sm:mt-12 sm:gap-x-5 sm:gap-y-12 lg:grid-cols-3 xl:gap-x-7 xl:gap-y-16">
           {visible.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
