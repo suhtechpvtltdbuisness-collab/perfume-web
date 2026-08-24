@@ -49,9 +49,9 @@ export default function StoryPage() {
             <p className="text-[0.68rem] uppercase tracking-luxury text-black/65">Our philosophy</p>
             <div className="mt-10 max-w-sm border-l border-black/15 pl-6 sm:mt-14 sm:pl-8">
               <div className="flex items-center gap-4">
-                <span className="flex size-12 items-center justify-center rounded-full border border-black/15 font-display text-xl italic">A</span>
-                <span className="h-px flex-1 bg-black/15" />
-                <span className="text-[0.6rem] uppercase tracking-[0.3em] text-black/65">Est. 1927</span>
+                {/* <span className="flex size-12 items-center justify-center rounded-full border border-black/15 font-display text-xl italic">A</span> */}
+                {/* <span className="h-px flex-1 bg-black/15" /> */}
+                {/* <span className="text-[0.6rem] uppercase tracking-[0.3em] text-black/65">Est. 1927</span> */}
               </div>
               <p className="mt-8 font-display text-3xl leading-tight sm:text-4xl">
                 Crafted for the journey, not just the destination.

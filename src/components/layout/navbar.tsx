@@ -133,9 +133,9 @@ export function Navbar() {
               ))}
             </ul>
           </nav>
-          <p className="mt-14 text-[0.6rem] uppercase tracking-luxury text-mist/75">
+          {/* <p className="mt-14 text-[0.6rem] uppercase tracking-luxury text-mist/75">
             Paris · Grasse · Since 1927
-          </p>
+          </p> */}
           <div className="mt-8 flex flex-wrap items-center gap-4">
             {isAdmin && (
               <Link
