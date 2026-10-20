@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, LogOut, Package, Pencil, Plus, Receipt, RotateCcw, TicketPercent, Trash2 } from "lucide-react";
+import { LayoutDashboard, Layers, LogOut, Package, Pencil, Plus, Receipt, RotateCcw, TicketPercent, Trash2 } from "lucide-react";
 
 import { CouponAdminView } from "@/components/admin/coupon-admin-view";
 import { OrderAdminView } from "@/components/admin/order-admin-view";
@@ -31,6 +31,25 @@ const emptyProduct: Product = {
   accent: "bg-[#8b5a3c]",
   featured: false,
   media: [],
+  isCombo: false,
+  comboItems: [],
+};
+
+const emptyComboProduct: Product = {
+  id: "",
+  slug: "",
+  name: "",
+  subtitle: "Curated Duo",
+  family: "Curated Combo",
+  price: 0,
+  size: "Set of 2",
+  description: "",
+  notes: ["", "", ""],
+  accent: "bg-[#93601f]",
+  featured: false,
+  media: [],
+  isCombo: true,
+  comboItems: [],
 };
 
 export function AdminDashboard() {
@@ -117,23 +136,53 @@ export function AdminDashboard() {
 
           {view === "products" && (
             <>
-              <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-                <AdminHeading eyebrow="Catalogue" title="Products" description="Add, edit, feature or remove fragrances." />
-                <Button onClick={() => setEditor({ ...emptyProduct, id: crypto.randomUUID() })}>
-                  <Plus className="size-4" /> Add perfume
-                </Button>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <AdminHeading eyebrow="Catalogue" title="Products & Sets" description="Add, edit, feature or bundle fragrances into combo sets." />
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button variant="outline" onClick={() => setEditor({ ...emptyComboProduct, id: crypto.randomUUID() })}>
+                    <Layers className="size-4" /> Add combo set
+                  </Button>
+                  <Button onClick={() => setEditor({ ...emptyProduct, id: crypto.randomUUID() })}>
+                    <Plus className="size-4" /> Add perfume
+                  </Button>
+                </div>
               </div>
               <div className="mt-10 overflow-x-auto border border-white/20">
                 <table className="w-full min-w-[720px] text-left">
                   <thead className="border-b border-white/20 bg-white/[0.065] text-[0.68rem] uppercase tracking-luxury text-ivory">
-                    <tr><th className="p-4">Product</th><th className="p-4">Family</th><th className="p-4">Price</th><th className="p-4">Status</th><th className="p-4 text-right">Actions</th></tr>
+                    <tr><th className="p-4">Product</th><th className="p-4">Type</th><th className="p-4">Family</th><th className="p-4">Price</th><th className="p-4">Status</th><th className="p-4 text-right">Actions</th></tr>
                   </thead>
                   <tbody className="divide-y divide-white/10">
                     {content.products.map((product) => (
                       <tr key={product.id} className="text-sm">
-                        <td className="p-4"><span className="font-display text-xl">{product.name}</span><span className="mt-1 block text-[0.68rem] uppercase tracking-editorial text-ivory/95">{product.size}</span></td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="font-display text-xl">{product.name}</span>
+                          </div>
+                          <span className="mt-1 block text-[0.68rem] uppercase tracking-editorial text-ivory/95">{product.size}</span>
+                        </td>
+                        <td className="p-4">
+                          {product.isCombo ? (
+                            <span className="inline-flex items-center gap-1 rounded border border-gold-300/40 bg-gold-300/10 px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-wider text-gold-300">
+                              <Layers className="size-3" /> Combo ({product.comboItems?.length ?? 0})
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[0.68rem] uppercase tracking-editorial text-mist/75">
+                              Single
+                            </span>
+                          )}
+                        </td>
                         <td className="p-4 text-ivory">{product.family}</td>
-                        <td className="p-4 text-ivory">₹{product.price.toLocaleString("en-IN")}</td>
+                        <td className="p-4 text-ivory">
+                          <div className="flex flex-col">
+                            {product.originalPrice && product.originalPrice > product.price && (
+                              <span className="text-[0.68rem] text-mist/60 line-through">
+                                ₹{product.originalPrice.toLocaleString("en-IN")}
+                              </span>
+                            )}
+                            <span className="font-medium">₹{product.price.toLocaleString("en-IN")}</span>
+                          </div>
+                        </td>
                         <td className="p-4"><span className={cn("text-[0.68rem] uppercase tracking-editorial", product.featured ? "text-gold-300" : "text-ivory/95")}>{product.featured ? "Featured" : "Active"}</span></td>
                         <td className="p-4">
                           <div className="flex justify-end gap-2">
@@ -164,6 +213,7 @@ export function AdminDashboard() {
       {editor && (
         <PerfumeFormModal
           product={editor}
+          products={content.products}
           onClose={() => setEditor(null)}
           onSave={async (product) => {
             await content.saveProduct(product);
@@ -190,7 +240,11 @@ function AdminLogin() {
       await adminLogin(String(data.get("password") ?? ""));
       router.replace("/admin");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Invalid admin credentials");
+      setError(
+        err instanceof ApiError
+          ? err.message
+          : "Invalid password. Use demo password 'admin' or start backend API on port 5001.",
+      );
     } finally {
       setLoading(false);
     }
@@ -202,8 +256,28 @@ function AdminLogin() {
         <p className="text-center text-[0.68rem] uppercase tracking-luxury text-gold-300">Autoroma control</p>
         <h1 className="mt-4 text-center font-display text-4xl">Admin access</h1>
         <label htmlFor="admin-password" className="mt-8 block text-[0.68rem] uppercase tracking-luxury text-ivory">Password</label>
-        <input id="admin-password" name="password" type="password" required className="mt-2 h-14 w-full border border-white/20 bg-black px-4 text-sm outline-none focus:border-gold-300/60" />
-        {error && <p className="mt-3 text-xs text-red-300">{error}</p>}
+        <input
+          id="admin-password"
+          name="password"
+          type="password"
+          defaultValue="admin"
+          required
+          className="mt-2 h-14 w-full border border-white/20 bg-black px-4 text-sm text-ivory outline-none focus:border-gold-300/60"
+        />
+        <div className="mt-2.5 flex items-center justify-between text-xs text-mist/75">
+          <span>Demo password:</span>
+          <button
+            type="button"
+            onClick={() => {
+              const input = document.getElementById("admin-password") as HTMLInputElement | null;
+              if (input) input.value = "admin";
+            }}
+            className="font-mono text-gold-300 underline underline-offset-4 hover:text-gold-200"
+          >
+            admin
+          </button>
+        </div>
+        {error && <p className="mt-3 text-xs text-red-300 leading-5">{error}</p>}
         <Button type="submit" className="mt-6 w-full" disabled={loading}>
           {loading ? "Checking…" : "Enter dashboard"}
         </Button>
@@ -400,12 +474,14 @@ function LandingEditor({
   onReset: () => Promise<void>;
 }) {
   const [draft, setDraft] = useState(value);
+  const [prevValue, setPrevValue] = useState(value);
   const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  if (prevValue !== value) {
+    setPrevValue(value);
     setDraft(value);
-  }, [value]);
+  }
 
   const updateText = (key: LandingTextKey, nextValue: string) =>
     setDraft((current) => ({ ...current, [key]: nextValue }));
@@ -413,8 +489,6 @@ function LandingEditor({
   const readList = (current: LandingContent, key: LandingListKey) =>
     current[key] as unknown as Record<string, string>[];
 
-  const writeList = (key: LandingListKey, next: Record<string, string>[]) =>
-    setDraft((current) => ({ ...current, [key]: next }) as LandingContent);
 
   const updateItem = (key: LandingListKey, index: number, field: string, nextValue: string) =>
     setDraft((current) => {

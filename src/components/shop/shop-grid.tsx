@@ -15,19 +15,26 @@ export function ShopGrid() {
 
   const filters = useMemo(() => {
     const present = new Set<string>();
+    let hasCombos = false;
     for (const product of products) {
+      if (product.isCombo) hasCombos = true;
       for (const label of baseFilters.slice(1)) {
         if (product.family.includes(label)) present.add(label);
       }
     }
-    return ["All", ...baseFilters.slice(1).filter((label) => present.has(label))];
+    const list = ["All", ...baseFilters.slice(1).filter((label) => present.has(label))];
+    if (hasCombos) {
+      list.push("Combos & Sets");
+    }
+    return list;
   }, [products]);
 
   const visible = useMemo(
-    () =>
-      active === "All"
-        ? products
-        : products.filter((product) => product.family.includes(active)),
+    () => {
+      if (active === "All") return products;
+      if (active === "Combos & Sets") return products.filter((product) => product.isCombo);
+      return products.filter((product) => product.family.includes(active));
+    },
     [active, products],
   );
 

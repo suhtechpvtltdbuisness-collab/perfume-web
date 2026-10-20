@@ -36,11 +36,14 @@ function toCreateBody(product: Product) {
     subtitle: product.subtitle,
     family: product.family,
     price: product.price,
+    originalPrice: product.originalPrice ?? null,
     size: product.size,
     description: product.description,
     notes: product.notes,
     accent: product.accent,
     featured: Boolean(product.featured),
+    isCombo: Boolean(product.isCombo),
+    comboItems: product.comboItems ?? [],
     media: (product.media ?? [])
       .filter((item) => Boolean(item.url))
       .map((item) => ({

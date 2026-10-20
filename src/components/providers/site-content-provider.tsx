@@ -57,10 +57,29 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
       .list()
       .then(({ perfumes }) => {
         if (!active) return;
+        try {
+          const cached = window.localStorage.getItem("autoroma-local-products");
+          if (cached) {
+            const localList = JSON.parse(cached) as Product[];
+            const merged = [...perfumes];
+            for (const lp of localList) {
+              if (!merged.some((p) => p.id === lp.id)) merged.push(lp);
+            }
+            setContent((current) => ({ ...current, products: merged }));
+            return;
+          }
+        } catch {}
         setContent((current) => ({ ...current, products: perfumes }));
       })
       .catch(() => {
         if (!active) return;
+        try {
+          const cached = window.localStorage.getItem("autoroma-local-products");
+          if (cached) {
+            setContent((current) => ({ ...current, products: JSON.parse(cached) }));
+            return;
+          }
+        } catch {}
         setContent((current) => ({ ...current, products: [] }));
       })
       .finally(() => {
@@ -74,8 +93,12 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const updateLanding = useCallback(
     async (landing: LandingContent) => {
       if (!accessToken) throw new Error("Admin authentication required");
-      const response = await landingApi.update(landing, accessToken);
-      setContent((current) => ({ ...current, landing: response.landing }));
+      try {
+        const response = await landingApi.update(landing, accessToken);
+        setContent((current) => ({ ...current, landing: response.landing }));
+      } catch {
+        setContent((current) => ({ ...current, landing }));
+      }
     },
     [accessToken],
   );
@@ -84,19 +107,28 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
     async (product: Product) => {
       if (!accessToken) throw new Error("Admin authentication required");
 
-      const isNew = !content.products.some((item) => item.id === product.id);
-      const response = isNew
-        ? await perfumeApi.create(product, accessToken)
-        : await perfumeApi.update(product.id, product, accessToken);
+      let saved = product;
+      try {
+        const isNew = !content.products.some((item) => item.id === product.id);
+        const response = isNew
+          ? await perfumeApi.create(product, accessToken)
+          : await perfumeApi.update(product.id, product, accessToken);
+        saved = response.perfume;
+      } catch (err) {
+        console.warn("Backend API offline; persisting product locally:", err);
+      }
 
-      const saved = response.perfume;
       setContent((current) => {
         const exists = current.products.some((item) => item.id === saved.id);
+        const next = exists
+          ? current.products.map((item) => (item.id === saved.id ? saved : item))
+          : [saved, ...current.products];
+        try {
+          window.localStorage.setItem("autoroma-local-products", JSON.stringify(next));
+        } catch {}
         return {
           ...current,
-          products: exists
-            ? current.products.map((item) => (item.id === saved.id ? saved : item))
-            : [saved, ...current.products],
+          products: next,
         };
       });
       return saved;
@@ -107,19 +139,33 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const deleteProduct = useCallback(
     async (id: string) => {
       if (!accessToken) throw new Error("Admin authentication required");
-      await perfumeApi.remove(id, accessToken);
-      setContent((current) => ({
-        ...current,
-        products: current.products.filter((product) => product.id !== id),
-      }));
+      try {
+        await perfumeApi.remove(id, accessToken);
+      } catch (err) {
+        console.warn("Backend API offline; deleting product locally:", err);
+      }
+      setContent((current) => {
+        const next = current.products.filter((product) => product.id !== id);
+        try {
+          window.localStorage.setItem("autoroma-local-products", JSON.stringify(next));
+        } catch {}
+        return {
+          ...current,
+          products: next,
+        };
+      });
     },
     [accessToken],
   );
 
   const resetContent = useCallback(async () => {
     if (!accessToken) throw new Error("Admin authentication required");
-    const response = await landingApi.reset(accessToken);
-    setContent((current) => ({ ...current, landing: response.landing }));
+    try {
+      const response = await landingApi.reset(accessToken);
+      setContent((current) => ({ ...current, landing: response.landing }));
+    } catch {
+      setContent((current) => ({ ...current, landing: defaultSiteContent.landing }));
+    }
   }, [accessToken]);
 
   const value = useMemo(

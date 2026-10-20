@@ -129,7 +129,10 @@ export function CouponProvider({ children }: { children: ReactNode }) {
   const cartContext = useMemo<CouponContextInput>(
     () => ({
       subtotal,
-      productIds: items.map((item) => item.product.id),
+      productIds: items.flatMap((item) => [
+        item.product.id,
+        ...(item.product.comboItems?.map((ci) => ci.productId) ?? []),
+      ]),
       categories: [...new Set(items.map((item) => item.product.family))],
       brands: items.length ? ["Autoroma"] : [],
     }),
